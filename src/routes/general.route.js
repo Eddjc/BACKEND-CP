@@ -5,7 +5,7 @@ const manage = require('../utils/management');
 // Exportar Rutas
 module.exports = function(app, auth) {
 
-    app.get('/obtener-aldeas', auth, (req, res) => {
+    app.get('/obtener-aldeas',  (req, res) => {
 
         try {
 
@@ -26,7 +26,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/obtener-barrios', auth, (req, res) => {
+    app.get('/obtener-barrios',  (req, res) => {
 
         try {
 
@@ -47,7 +47,7 @@ module.exports = function(app, auth) {
         }
     });
     
-    app.get('/obtener-caserios', auth, (req, res) => {
+    app.get('/obtener-caserios',  (req, res) => {
 
         try {
 
@@ -68,7 +68,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/obtener-departamentos', auth, (req, res) => {
+    app.get('/obtener-departamentos',  (req, res) => {
 
         try {
 
@@ -86,7 +86,7 @@ module.exports = function(app, auth) {
         }
     });
     
-    app.get('/obtener-municipios', auth, (req, res) => {
+    app.get('/obtener-municipios',  (req, res) => {
 
         try {
 
@@ -105,7 +105,7 @@ module.exports = function(app, auth) {
 
     });
     
-    app.get('/obtener-tipos-actividades-agricolas', auth, (req, res) => {
+    app.get('/obtener-tipos-actividades-agricolas',  (req, res) => {
 
         try {
 
@@ -123,7 +123,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/obtener-tipos-infraestructuras', auth, (req, res) => {
+    app.get('/obtener-tipos-infraestructuras',  (req, res) => {
 
         try {
 
@@ -142,7 +142,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/obtener-roles', auth, (req, res) => {
+    app.get('/obtener-roles',  (req, res) => {
 
         try {
 
