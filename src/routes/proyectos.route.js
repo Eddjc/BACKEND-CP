@@ -1,0 +1,347 @@
+// Modelos requeridos
+const proyectos = require('../models/proyectos.model');
+const manage = require('../utils/management');
+const cipher = require('../middleware/cipher');
+// Exportar Rutas
+module.exports = function(app, auth) {
+
+
+    app.put('/actualizar-proyecto', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                nombre_proyecto: parametros.nombre_proyecto,
+                descripcion_proyecto: parametros.descripcion_proyecto,
+                id_departamento : parametros.id_departamento,
+                id_municipio : parametros.id_municipio,
+                id_tipo_actividades: parametros.id_tipo_actividades,
+                id_tipo_infraestructura: parametros.id_tipo_infraestructura,
+                inversion_solicitada: parametros.inversion_solicitada,
+                aporte_municipal: parametros.aporte_municipal,
+                longitud: parametros.longitud,
+                latitud: parametros.latitud,
+                tiempo_ejecucion: parametros.tiempo_ejecucion,
+                poblacion: parametros.poblacion,
+                empleos_directos: parametros.empleos_directos,
+                empleos_indirectos: parametros.empleos_indirectos,
+                aldea : parametros.aldea,
+                distancia_proyecto : parametros.distancia_proyecto,
+                modificado_por: parametros.id_usuario
+            };
+
+            proyectos.actualizarProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/asignar-contratista', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                contratista: parametros.contratista,
+                id_admin: parametros.id_admin,
+                id_institucion: parametros.id_institucion
+            };
+
+            proyectos.asignarContratista(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/detalle-proyecto', auth, (req, res) => {
+
+        try {
+
+            const data = req.query;
+
+            proyectos.obtenerDetalleProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/asignar-supervisor', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                supervisor: parametros.supervisor,
+                id_admin: parametros.id_admin,
+                id_institucion: parametros.id_institucion
+            };
+
+            proyectos.asignarSupervisor(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/inactivar-anexo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_anexo: parametros.id_anexo,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.inhabilitarAnexo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado;
+                    manage.returnSuccess('', datos, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/inactivar-proyecto', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.inhabilitarProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado;
+                    manage.returnSuccess('', datos, res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/insertar-anexo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_fase: parametros.id_fase,
+                url: parametros.url,
+                id_tipo_anexo: parametros.id_tipo_anexo,
+                id_referencia: parametros.id_referencia,
+                id_usuario: parametros.id_usuario
+            };
+
+            proyectos.insertarAnexo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/insertar-seguimiento', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_fase: parametros.id_fase,
+                valor: parametros.valor,
+                motivo: parametros.motivo,
+                id_proyecto: parametros.id_proyecto,
+                id_usuario: parametros.id_usuario
+            };
+
+            proyectos.insertarSeguimiento(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/listar-anexos', auth, (req, res) => {
+        try {
+            const parametros = req.query;
+            const data = {
+                id_tipo_anexo: parametros.id_tipo_anexo,
+                id_referencia: parametros.id_referencia
+            };
+
+            proyectos.obtenerAnexosProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess('', resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/pagar-proyecto', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.pagarProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/presupuesto-proyecto', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                presupuesto: parametros.presupuesto,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.asignarPresupuestoProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/proyecto', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                nombre_proyecto: parametros.nombre_proyecto,
+                descripcion_proyecto: parametros.descripcion_proyecto,
+                id_departamento : parametros.id_departamento,
+                id_municipio : parametros.id_municipio,
+                id_tipo_actividades: parametros.id_tipo_actividades,
+                id_tipo_infraestructura: parametros.id_tipo_infraestructura,
+                inversion_solicitada: parametros.inversion_solicitada,
+                aporte_municipal: parametros.aporte_municipal,
+                longitud: parametros.longitud,
+                latitud: parametros.latitud,
+                tiempo_ejecucion: parametros.tiempo_ejecucion,
+                poblacion_beneficiada: parametros.poblacion_beneficiada,
+                empleos_directos: parametros.empleos_directos,
+                empleos_indirectos: parametros.empleos_indirectos,
+                aldea : parametros.aldea,
+                distancia_proyecto : parametros.distancia_proyecto,
+                creado_por: parametros.id_usuario
+            };
+
+            proyectos.crearProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    
+                    res.status(200).json(cipher.cipher({
+                        status: datos[0] > 0 ? 'exito' : 'fallido',
+                        message: datos[1],
+                        data: []
+                        })); 
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/proyectos', auth, (req, res) => {
+
+        try {
+
+            const data = {};
+
+            proyectos.obtenerProyectos(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/seguimiento-proyecto', auth, (req, res) => {
+
+        try {
+
+            const data = req.query;
+
+            proyectos.obtenerSeguimientoProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+
+    });
+}

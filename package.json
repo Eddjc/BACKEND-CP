@@ -1,0 +1,35 @@
+{
+  "name": ".|,",
+  "version": "2.0.0",
+  "description": "API para que chinguen su madre",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Sistemas",
+    "email": "sae@sit.gob.hn",
+    "url": "https://sae.sit.gob.hn"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-updated": "^5.0.6",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.4.0",
+    "formidable": "^2.0.1",
+    "fs": "^0.0.1-security",
+    "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "mime-types": "^2.1.35",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.20",
+    "path": "^0.12.7",
+    "socket.io": "^2.4.1"
+  }
+}
