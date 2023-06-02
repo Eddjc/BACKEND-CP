@@ -52,7 +52,6 @@ app.use(express.static('./public'));
 require("./src/routes/login.route")(app, auth);
 require("./src/routes/anexo.route")(app, auth);
 require("./src/routes/general.route")(app, auth);
-require("./src/routes/procesos.route")(app, auth);
 require("./src/routes/proyectos.route")(app, auth);
 require("./src/routes/usuarios.route")(app, auth);
 require("./src/routes/contratistas.route")(app, auth);

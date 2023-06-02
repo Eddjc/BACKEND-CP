@@ -311,7 +311,7 @@ module.exports = function(app, auth) {
 
     });
 
-app.get('/reporte-contrato-proyecto', (req, res) => {
+    app.get('/reporte-contrato-proyecto', (req, res) => {
 
         try {
 

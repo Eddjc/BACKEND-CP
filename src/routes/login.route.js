@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const manage = require('../utils/management');
 const cipher = require('../middleware/cipher');
+const CryptoJS = require('crypto-js');
 // Exportar Rutas
 module.exports = function(app, auth) {
 
@@ -15,16 +16,18 @@ module.exports = function(app, auth) {
                 correo: parametros.correo,
                 contrasenia: parametros.contrasenia
             };
-
+            
             login.login(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    let datos = resultado[0][0].response.split('|');
+                    
+                    let datos = resultado[1][0].response.split('|');
+                    console.log('data', datos);
 
                     if (parseInt(datos[0]) > 0) {
-                        
-                        const esValida = bcrypt.compareSync(data.contrasenia, datos[1]);
+                        const esValida = CryptoJS.MD5(data.contrasenia) == datos[1];
+                        console.log('es valida la pass ',esValida);
 
                         if (datos[2] == 'Sesion activa encontrada') {
                             res.status(200).json(cipher.cipher({
@@ -35,32 +38,42 @@ module.exports = function(app, auth) {
                         } else {
                             if (esValida) {
                                 const token = jwt.sign({
-                                    user_id: datos[0], rol: datos[2], user: datos[3]
+                                    user_id: datos[0], user: datos[3]
                                 }, process.env.TOKEN_KEY, {
                                     expiresIn: process.env.EXPIRES_TIME
                                 });
+                                console.log('token ', datos[2] );
     
-                                login.establecerSesion({id: datos[0]}, (error, resultado2) => {
+                                login.establecerSesion({id_usuario: datos[0]}, (error, resultado2) => {
                                     if (error) {
                                         manage.returnError(error, res);
                                     } else {
                                         const user = {
-                                            id: datos[0],
-                                            id_rol: datos[2],
-                                            nombre: datos[3],
-                                            id_institucion: datos[4],
+                                            id_usuario: datos[0],
+                                            // id_rol: datos[2],
+                                            nombre: datos[2],
+                                            // id_institucion: datos[4],
                                             _token: token
                                         };
+                                        console.log('info usuario ',user)
             
                                         const data2 = {
-                                            id_rol: datos[2]
+                                            id_usuario: datos[0]
                                         };
             
                                         login.obtenerPermisos(data2, (error, resultado) => {
                                             if (error) {
                                                 manage.returnError(error, res);
                                             } else {
+                                                const token_permisos = jwt.sign({
+                                                    permisos: resultado[0],
+                                                }, process.env.TOKEN_KEY, {
+                                                    expiresIn: process.env.EXPIRES_TIME
+                                                });
+                                                console.log('token de permisos ',token_permisos);
+                                                
                                                 user.permisos = resultado[0];
+                                                // user.token_permisos = token_permisos;
                                                 res.status(200).json(cipher.cipher({
                                                     status: 'exito',
                                                     message: "login completado",
