@@ -2,7 +2,7 @@ const connection = require("../../connection");
 let loginModel = {};
 
 loginModel.login = (data, callback) => {
-
+    console.log('data modelo ' , data );
     if (connection) {
 
         try {
@@ -69,11 +69,10 @@ loginModel.cambiaContrasenia = (data, callback) => {
 
 loginModel.establecerSesion = (data, callback) => {
     if (connection) {
-        
         try {
             const consulta = `
             CALL SP_REGISTRAR_INICIO_SESION(
-                ${connection.escape(data.id)}
+                ${connection.escape(data.id_usuario)}
             );
             `;
 
@@ -102,7 +101,7 @@ loginModel.obtenerPermisos = (data, callback) => {
         try {
             const consulta = `
             CALL SP_OBTENER_PERMISOS_USUARIO(
-                ${connection.escape(data.id_rol)}
+                ${connection.escape(data.id_usuario)}
             );
             `;
 
