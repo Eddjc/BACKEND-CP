@@ -26,47 +26,47 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/obtener-barrios', auth, (req, res) => {
+    // app.get('/obtener-barrios', auth, (req, res) => {
 
-        try {
+    //     try {
 
-            const params = req.query;
-            const data = {
-                id_caserio: params.id_caserio
-            };
+    //         const params = req.query;
+    //         const data = {
+    //             id_caserio: params.id_caserio
+    //         };
 
-            general.obtenerBarrios(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess(error, resultado, res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
+    //         general.obtenerBarrios(data, (error, resultado) => {
+    //             if (error) {
+    //                 manage.returnError(error, res);
+    //             } else {
+    //                 manage.returnSuccess(error, resultado, res);
+    //             }
+    //         });
+    //     } catch (error) {
+    //         manage.returnError(error, res);
+    //     }
+    // });
     
-    app.get('/obtener-caserios', auth, (req, res) => {
+    // app.get('/obtener-caserios', auth, (req, res) => {
 
-        try {
+    //     try {
 
-            const params = req.query;
-            const data = {
-                id_aldea: params.id_aldea
-            };
+    //         const params = req.query;
+    //         const data = {
+    //             id_aldea: params.id_aldea
+    //         };
 
-            general.obtenerCaserios(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess(error, resultado, res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
+    //         general.obtenerCaserios(data, (error, resultado) => {
+    //             if (error) {
+    //                 manage.returnError(error, res);
+    //             } else {
+    //                 manage.returnSuccess(error, resultado, res);
+    //             }
+    //         });
+    //     } catch (error) {
+    //         manage.returnError(error, res);
+    //     }
+    // });
 
     app.get('/obtener-departamentos', auth, (req, res) => {
 
@@ -149,6 +149,24 @@ module.exports = function(app, auth) {
             const data = {};
 
             general.obtenerRoles(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/obtener-estados', auth, (req, res) => {
+
+        try {
+
+            const data = {};
+
+            general.obtenerEstados(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
