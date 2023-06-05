@@ -50,8 +50,10 @@ module.exports = function(app, auth) {
                                     } else {
                                         const user = {
                                             id_usuario: datos[0],
-                                            // id_rol: datos[2],
                                             nombre: datos[2],
+                                            id_departamento: datos[3],
+                                            id_municipio: datos[4],
+                                            id_rol: datos[5],
                                             // id_institucion: datos[4],
                                             _token: token
                                         };
