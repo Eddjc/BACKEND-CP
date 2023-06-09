@@ -8,8 +8,6 @@ module.exports = function(app, auth) {
 
         try {
 
-            let parameters = req.query;
-
             const data = {};
 
             bi.portalCiudadano(data, (error, resultado) => {

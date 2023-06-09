@@ -94,7 +94,6 @@ generalModel.obtenerDepartamentos = (data, callback) => {
             `;
 
             connection.query(consulta, (error, resultado) => {
-                console.log(resultado)
                     if (error) {
                         console.log(error);
                     } else {
