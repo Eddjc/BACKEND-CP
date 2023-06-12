@@ -326,6 +326,30 @@ module.exports = function(app, auth) {
         }
     });
 
+
+    app.get('/proyectos-municipios', auth, (req, res) => {
+
+        try {
+            console.log('parametrso ',req.query);
+            const parametros = req.query;
+
+            const data = {
+                id_solicitud: parametros.id_solicitud,
+                id_municipio: parametros.id_municipio
+            }
+
+            proyectos.obtenerProyectosMunicipio(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
     app.get('/seguimiento-proyecto', auth, (req, res) => {
 
         try {
@@ -343,5 +367,23 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
 
+    });
+
+    app.get('/obtener-tipos-documentos', auth, (req, res) => {
+
+        try {
+            console.log('llega aqui');
+            const data = {};
+
+            proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
     });
 }

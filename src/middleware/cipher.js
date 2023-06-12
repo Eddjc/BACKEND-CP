@@ -22,7 +22,7 @@ cipher.decipher = (req, res, next) => {
         const newJson = newbody.updates.reduce((acc, curr) => {
             acc[curr.param] = curr.value;
             return acc;
-          }, {});
+        }, {});
         req.body = newJson;
     }
     next();

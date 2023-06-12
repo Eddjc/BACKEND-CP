@@ -454,6 +454,38 @@ proyectosModel.obtenerProyectos = (data, callback) => {
     }
 };
 
+proyectosModel.obtenerProyectosMunicipio = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_OBTENER_PROYECTOS_X_MUNICIPIO(
+                ${connection.escape(data.id_municipio)},
+                ${connection.escape(data.id_usuario)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                        callback(error, null);
+                    } else {
+                        callback(null, resultado[0]);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
 proyectosModel.obtenerSeguimientoProyecto = (data, callback) => {
     if (connection) {
 
@@ -509,6 +541,34 @@ proyectosModel.pagarProyecto = (data, callback) => {
             );
         } catch (error) {
             console.log(error);
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
+proyectosModel.obtenerTiposDocumentos = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_OBTENER_TIPOS_DOCUMENTOS();
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado[0]);
+                    }
+
+                }
+
+            );
+        } catch (error) {
             callback(error, null);
         }
 

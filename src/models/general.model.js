@@ -94,7 +94,6 @@ generalModel.obtenerDepartamentos = (data, callback) => {
             `;
 
             connection.query(consulta, (error, resultado) => {
-                console.log(resultado)
                     if (error) {
                         console.log(error);
                     } else {
@@ -143,12 +142,12 @@ generalModel.obtenerMunicipios = (data, callback) => {
     }
 };
 
-generalModel.obtenerTiposActividadesAgricolas = (data, callback) => {
+generalModel.obtenerTiposActividadesEconomicas = (data, callback) => {
     if (connection) {
 
         try {
             const consulta = `
-            CALL SP_OBTENER_TIPOS_ACTIVIDADES_AGRICOLAS;
+            CALL SP_OBTENER_ACTIVIDADES_ECONOMICAS;
             `;
 
             connection.query(consulta, (error, resultado) => {
@@ -188,8 +187,8 @@ generalModel.obtenerTiposInfraestructuras = (data, callback) => {
                     }
 
                 }
-
-            );
+                );
+                // console.log(consulta);
         } catch (error) {
             callback(error, null);
         }
@@ -254,5 +253,6 @@ generalModel.obtenerEstados = (data, callback) => {
         callback("Connection not found", null);
     }
 };
+
 
 module.exports = generalModel;

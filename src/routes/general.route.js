@@ -91,11 +91,12 @@ module.exports = function(app, auth) {
         try {
 
             const data = req.query;            
-
+            console.log('id municipio ',data);
             general.obtenerMunicipios(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
+                    console.log(res);
                     manage.returnSuccess(error, resultado, res);
                 }
             });
@@ -105,13 +106,13 @@ module.exports = function(app, auth) {
 
     });
     
-    app.get('/obtener-tipos-actividades-agricolas',  (req, res) => {
+    app.get('/obtener-tipos-actividades-economicas',  (req, res) => {
 
         try {
 
             const data = {};
 
-            general.obtenerTiposActividadesAgricolas(data, (error, resultado) => {
+            general.obtenerTiposActividadesEconomicas(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -177,4 +178,6 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
+
+    
 }
