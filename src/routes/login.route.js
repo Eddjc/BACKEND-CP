@@ -21,14 +21,10 @@ module.exports = function(app, auth) {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    
                     let datos = resultado[1][0].response.split('|');
-                    console.log('data', datos);
-
                     if (parseInt(datos[0]) > 0) {
+                        //const esValida = data.contrasenia == datos[1];
                         const esValida = CryptoJS.MD5(data.contrasenia) == datos[1];
-                        console.log('es valida la pass ',esValida);
-
                         if (datos[2] == 'Sesion activa encontrada') {
                             res.status(200).json(cipher.cipher({
                                 status: 'fallido',
@@ -42,7 +38,6 @@ module.exports = function(app, auth) {
                                 }, process.env.TOKEN_KEY, {
                                     expiresIn: process.env.EXPIRES_TIME
                                 });
-                                console.log('token ', datos[2] );
     
                                 login.establecerSesion({id_usuario: datos[0]}, (error, resultado2) => {
                                     if (error) {
@@ -54,10 +49,12 @@ module.exports = function(app, auth) {
                                             id_departamento: datos[3],
                                             id_municipio: datos[4],
                                             id_rol: datos[5],
-                                            // id_institucion: datos[4],
+                                            correo: datos[6],
+                                            departamento: datos[7],
+                                            municipio: datos[8],
+                                            rol: datos[9],
                                             _token: token
                                         };
-                                        console.log('info usuario ',user)
             
                                         const data2 = {
                                             id_usuario: datos[0]
@@ -71,9 +68,7 @@ module.exports = function(app, auth) {
                                                     permisos: resultado[0],
                                                 }, process.env.TOKEN_KEY, {
                                                     expiresIn: process.env.EXPIRES_TIME
-                                                });
-                                                console.log('token de permisos ',token_permisos);
-                                                
+                                                });                                                
                                                 user.permisos = resultado[0];
                                                 // user.token_permisos = token_permisos;
                                                 res.status(200).json(cipher.cipher({

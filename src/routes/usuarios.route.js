@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const manage = require('../utils/management');
+const CryptoJS = require('crypto-js');
 // Exportar Rutas
 module.exports = function(app, auth) {
 
@@ -42,16 +43,12 @@ module.exports = function(app, auth) {
 
         try {
             const parametros = req.query;
-
-            var salt = bcrypt.genSaltSync(10);
-            let hash = bcrypt.hashSync(parametros.contrasenia, salt);
-
+            hash = CryptoJS.MD5(parametros.contrasenia).toString();
             const data = {
                 id_usuario: parametros.id_usuario,
                 contrasenia: hash,
-                id_admin: parametros.id_admin
+                modificado_por: parametros.modificado_por
             };
-
             usuarios.cambiarContrasenia(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
@@ -85,22 +82,20 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/usuario', auth,  (req, res) => {
+    app.post('/usuario',  (req, res) => {
 
         try {
             const parametros = req.body;
-            const salt = bcrypt.genSaltSync(saltRounds);
-            const hash = bcrypt.hashSync(parametros.contrasenia, salt);
             const data = {
-                contrasenia: hash,
-                telefono: parametros.telefono,
+                dni: parametros.dni,
+                nombre_usuario: parametros.nombre_usuario,
                 correo: parametros.correo,
                 direccion: parametros.direccion,
-                dni: parametros.dni,
-                nombre: parametros.nombre,
+                telefono: parametros.telefono,
+                id_rol: parametros.id_rol,                
                 id_departamento: parametros.id_departamento,
                 id_municipio: parametros.id_municipio,
-                id_organizacion: parametros.id_organizacion,                
+                estado: parametros.estado,
                 creado_por: parametros.creado_por
             };
 
