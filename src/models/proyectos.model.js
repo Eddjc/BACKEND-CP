@@ -368,7 +368,7 @@ proyectosModel.obtenerDetalleProyecto = (data, callback) => {
         try {
             const consulta = `
             CALL SP_OBTENER_DETALLE_PROYECTO(
-                ${connection.escape(data.id)}
+                ${connection.escape(data.id_proyecto)}
             );
             `;
 

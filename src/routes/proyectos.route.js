@@ -71,6 +71,7 @@ module.exports = function(app, auth) {
     app.get('/detalle-proyecto', auth, (req, res) => {
 
         try {
+            parame
 
             const data = req.query;
 
