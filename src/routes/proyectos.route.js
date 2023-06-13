@@ -71,9 +71,9 @@ module.exports = function(app, auth) {
     app.get('/detalle-proyecto', auth, (req, res) => {
 
         try {
-            parame
 
             const data = req.query;
+            console.log('id de proyecto', data);
 
             proyectos.obtenerDetalleProyecto(data, (error, resultado) => {
                 if (error) {
