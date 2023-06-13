@@ -49,6 +49,7 @@ app.use(express.static('./public'));
 
 
 /* ============== Rutas gestionadas ==============*/
+require("./src/routes/portal.route")(app, auth);
 require("./src/routes/login.route")(app, auth);
 require("./src/routes/anexo.route")(app, auth);
 require("./src/routes/general.route")(app, auth);
@@ -56,6 +57,8 @@ require("./src/routes/proyectos.route")(app, auth);
 require("./src/routes/usuarios.route")(app, auth);
 require("./src/routes/contratistas.route")(app, auth);
 require("./src/routes/contratos.route")(app, auth);
+
+
 
 const http = require('http').createServer(app, {
     cors: {
