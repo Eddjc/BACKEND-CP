@@ -22,10 +22,8 @@ const err = require('./src/middleware/err');
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({origins: ['*']}));
 require("./src/routes/bi.route")(app, auth);
-
-app.use(cipherMid.decipher);
 
 /* Cors */
 app.use(function(req, res, next) {
@@ -39,9 +37,10 @@ app.use(function(req, res, next) {
 app.use(enoent);
 app.use(eexist);
 app.use(err);
-
-
+/* Desencriptar */
+app.use(cipherMid.decipher);
 //app.use(ip);
+
 
 /* ============== Archivos estaticos ============== */
 app.use(express.static('./public'));
@@ -60,16 +59,16 @@ require("./src/routes/contratos.route")(app, auth);
 
 
 
-const http = require('http').createServer(app, {
-    cors: {
-        origins: ['*']
-    }
-});
-/* ============== Puerto ============== */
-app.set('port', 3501);
-http.listen(app.get('port'), () => {
-    console.log(`Server on port ${app.get('port')}`);
-});
+// const http = require('http').createServer(app, {
+//     cors: {
+//         origins: ['*']
+//     }
+// });
+// /* ============== Puerto ============== */
+// app.set('port', 3501);
+// http.listen(app.get('port'), () => {
+//     console.log(`Server on port ${app.get('port')}`);
+// });
 
 // const options = {
 // 	key: fs.readFileSync('C:/ssl/ssl.key', 'utf-8'),
@@ -80,3 +79,6 @@ http.listen(app.get('port'), () => {
 // https.createServer(options, app).listen( 5000, function(req, res) {
 // 	console.log(`Server on port 5000`);
 // });
+app.listen(3501, function(req, res) {
+    console.log(`Server on port 3501`);
+});

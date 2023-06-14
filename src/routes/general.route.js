@@ -89,14 +89,11 @@ module.exports = function(app, auth) {
     app.get('/obtener-municipios',  (req, res) => {
 
         try {
-
             const data = req.query;            
-            console.log('id municipio ',data);
             general.obtenerMunicipios(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    console.log(res);
                     manage.returnSuccess(error, resultado, res);
                 }
             });
