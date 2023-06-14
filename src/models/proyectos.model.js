@@ -335,8 +335,8 @@ proyectosModel.obtenerAnexosProyecto = (data, callback) => {
         try {
             const consulta = `
             CALL SP_OBTENER_ANEXOS(
-                ${connection.escape(data.id_tipo_anexo)},
-                ${connection.escape(data.id_referencia)}
+                ${connection.escape(data.id_referencia)},
+                ${connection.escape(data.id_tipo_referencia)}
 
             );
             `;
@@ -554,7 +554,9 @@ proyectosModel.obtenerTiposDocumentos = (data, callback) => {
 
         try {
             const consulta = `
-            CALL SP_OBTENER_TIPOS_DOCUMENTOS();
+            CALL SP_OBTENER_TIPOS_DOCUMENTOS(
+                ${connection.escape(data.id_fase)}
+            );
             `;
 
             connection.query(consulta, (error, resultado) => {

@@ -126,7 +126,6 @@ module.exports = function(app, auth) {
         try {
 
             const data = {};
-            console.log('llega aqui');
 
             general.obtenerTiposInfraestructuras(data, (error, resultado) => {
                 if (error) {
