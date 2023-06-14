@@ -91,12 +91,10 @@ module.exports = function(app, auth) {
         try {
 
             const data = req.query;            
-            console.log('id municipio ',data);
             general.obtenerMunicipios(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    console.log(res);
                     manage.returnSuccess(error, resultado, res);
                 }
             });
@@ -129,7 +127,6 @@ module.exports = function(app, auth) {
         try {
 
             const data = {};
-            console.log('llega aqui');
 
             general.obtenerTiposInfraestructuras(data, (error, resultado) => {
                 if (error) {

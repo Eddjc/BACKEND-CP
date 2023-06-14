@@ -73,7 +73,6 @@ module.exports = function(app, auth) {
         try {
 
             const data = req.query;
-            console.log('id de proyecto', data);
 
             proyectos.obtenerDetalleProyecto(data, (error, resultado) => {
                 if (error) {
@@ -202,12 +201,13 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/listar-anexos', auth, (req, res) => {
+    app.get('/listar-anexos-proyecto', auth, (req, res) => {
         try {
+            console.log('paramentos ',req.query);
             const parametros = req.query;
             const data = {
-                id_tipo_anexo: parametros.id_tipo_anexo,
-                id_referencia: parametros.id_referencia
+                id_referencia: parametros.id_proyecto,
+                id_tipo_referencia: parametros.id_referencia
             };
 
             proyectos.obtenerAnexosProyecto(data, (error, resultado) => {
@@ -331,7 +331,6 @@ module.exports = function(app, auth) {
     app.get('/proyectos-municipios', auth, (req, res) => {
 
         try {
-            console.log('parametrso ',req.query);
             const parametros = req.query;
 
             const data = {
@@ -373,8 +372,11 @@ module.exports = function(app, auth) {
     app.get('/obtener-tipos-documentos', auth, (req, res) => {
 
         try {
-            console.log('llega aqui');
-            const data = {};
+            const parametros = req.query;
+
+            const data = {
+                id_fase: parametros.id_fase
+            }
 
             proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
                 if (error) {
