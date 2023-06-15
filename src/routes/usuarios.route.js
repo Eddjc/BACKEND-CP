@@ -13,18 +13,19 @@ module.exports = function(app, auth) {
         try {
             const parametros = req.body;
             const data = {
-                id_usuario: parametros.id_usuario,
-                nombre: parametros.nombre,
-                telefono: parametros.telefono,
-                direccion: parametros.direccion,
-                correo: parametros.correo,
+                id_rol: parametros.id_rol,                
                 dni: parametros.dni,
+                nombre_usuario: parametros.nombre_usuario,
+                correo: parametros.correo,
+                direccion: parametros.direccion,
+                telefono: parametros.telefono,
                 id_departamento: parametros.id_departamento,
                 id_municipio: parametros.id_municipio,
-                id_organizacion: parametros.id_organizacion,                
-                creado_por: parametros.creado_por
+                id_usuario: parametros.id_usuario,
+                id_admin: parametros.id_admin
             };
-
+            
+            console.log(data, 'datos usuario')
             usuarios.actualizarUsuario(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);    

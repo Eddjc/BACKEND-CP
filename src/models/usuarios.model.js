@@ -7,15 +7,15 @@ usuariosModel.actualizarUsuario = (data, callback) => {
         try {
             const consulta = `
             CALL SP_ACTUALIZAR_USUARIO(
-                ${connection.escape(data.id_usuario)},
-                ${connection.escape(data.nombre)},
-                ${connection.escape(data.telefono)},
-                ${connection.escape(data.direccion)},
-                ${connection.escape(data.correo)},
+                ${connection.escape(data.id_rol)},
                 ${connection.escape(data.dni)},
+                ${connection.escape(data.nombre_usuario)},
+                ${connection.escape(data.correo)},
+                ${connection.escape(data.direccion)},
+                ${connection.escape(data.telefono)},
                 ${connection.escape(data.id_departamento)},
                 ${connection.escape(data.id_municipio)},
-                ${connection.escape(data.id_organizacion)},
+                ${connection.escape(data.id_usuario)},
                 ${connection.escape(data.id_admin)}
             );
             `;
@@ -40,7 +40,6 @@ usuariosModel.actualizarUsuario = (data, callback) => {
 };
 
 usuariosModel.cambiarContrasenia = (data, callback) => {
-    console.log(data)
 
     if (connection) {
 
