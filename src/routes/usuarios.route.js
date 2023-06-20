@@ -5,6 +5,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const manage = require('../utils/management');
 const CryptoJS = require('crypto-js');
+const usuariosModel = require('../models/usuarios.model');
 // Exportar Rutas
 module.exports = function(app, auth) {
 
@@ -21,11 +22,11 @@ module.exports = function(app, auth) {
                 telefono: parametros.telefono,
                 id_departamento: parametros.id_departamento,
                 id_municipio: parametros.id_municipio,
+                estado: parametros.estado,
                 id_usuario: parametros.id_usuario,
                 id_admin: parametros.id_admin
             };
             
-            console.log(data, 'datos usuario')
             usuarios.actualizarUsuario(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);    
@@ -82,6 +83,88 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
+
+    app.get('/obtener-modulos', (req, res) => {
+
+        try {
+
+            const data = {};
+
+            usuarios.obtenerModulos(data, (error, resultado) => {
+                if (error) {
+                    res.status(200).json({
+                        status: 'fallido',
+                        message: error,
+                        data: null
+                    });
+                } else {
+
+                    res.status(200).json({
+                        status: 'exito',
+                        message: error,
+                        data: resultado[0]
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(200).json({
+                status: 'fallido',
+                message: error,
+                data: null
+            });
+        }
+
+    });
+
+    app.get('/permisos-por-usuario', auth, (req, res) => {
+
+        try {
+            const parametros = req.query;
+            const data = {
+                id_usuario: parametros.id_usuario,
+            };
+
+            usuarios.permisosUsuario(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess('', resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+
+     app.put('/actualizar-permiso', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_usuario: parametros.id_usuario,
+                id_permiso: parametros.id_permiso,
+                id_modulo: parametros.id_modulo,
+                id_admin: parametros.id_admin
+            };
+            
+            usuarios.actualizarPermiso(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                   
+                    let datos = resultado.split('|');
+                      
+                    manage.returnSuccess(datos[1], datos[0], res); 
+                                   
+                }
+            });
+
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
 
     app.post('/usuario',  (req, res) => {
 

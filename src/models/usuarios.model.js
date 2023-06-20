@@ -15,6 +15,7 @@ usuariosModel.actualizarUsuario = (data, callback) => {
                 ${connection.escape(data.telefono)},
                 ${connection.escape(data.id_departamento)},
                 ${connection.escape(data.id_municipio)},
+                ${connection.escape(data.estado)},
                 ${connection.escape(data.id_usuario)},
                 ${connection.escape(data.id_admin)}
             );
@@ -129,6 +130,100 @@ usuariosModel.detalleUsuario = (data, callback) => {
                         console.log(error);
                     } else {
                         callback(null, resultado[0][0]);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
+usuariosModel.obtenerModulos = (data, callback) => {
+
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_OBTENER_MODULOS();
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+
+};
+
+usuariosModel.permisosUsuario = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_OBTENER_PERMISOS(
+                ${connection.escape(data.id_usuario)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado[0]);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
+
+usuariosModel.actualizarPermiso = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_ACTUALIZAR_PERMISO(
+                ${connection.escape(data.id_usuario)},
+                ${connection.escape(data.id_permiso)},
+                ${connection.escape(data.id_modulo)},
+                ${connection.escape(data.id_admin)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado[0][0].response);
                     }
 
                 }

@@ -63,4 +63,38 @@ portalModel.obtenerAnexosPortal = (data, callback) => {
     }
 };
 
+
+
+portalModel.reportePorUsuario = (data, callback) => {
+
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_REPORTE_X_USUARIO (
+                ${connection.escape(data.id_usuario)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+
+};
+
 module.exports = portalModel;

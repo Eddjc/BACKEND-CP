@@ -175,6 +175,9 @@ module.exports = function(app, auth) {
 
     });
 
+    
+  
+
     app.get('/reporte-contratos', (req, res) => {
 
         try {
