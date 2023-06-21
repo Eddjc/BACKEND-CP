@@ -89,7 +89,6 @@ module.exports = function(app, auth) {
     app.get('/obtener-municipios',  (req, res) => {
 
         try {
-
             const data = req.query;            
             general.obtenerMunicipios(data, (error, resultado) => {
                 if (error) {

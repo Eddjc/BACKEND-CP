@@ -16,19 +16,19 @@ module.exports = function(app, auth) {
                 descripcion_proyecto: parametros.descripcion_proyecto,
                 id_departamento : parametros.id_departamento,
                 id_municipio : parametros.id_municipio,
-                id_tipo_actividades: parametros.id_tipo_actividades,
-                id_tipo_infraestructura: parametros.id_tipo_infraestructura,
+                id_actividad_economica: parametros.id_actividad_economica,
+                id_infraestructura: parametros.id_infraestructura,
                 inversion_solicitada: parametros.inversion_solicitada,
                 aporte_municipal: parametros.aporte_municipal,
                 longitud: parametros.longitud,
                 latitud: parametros.latitud,
                 tiempo_ejecucion: parametros.tiempo_ejecucion,
-                poblacion: parametros.poblacion,
+                poblacion_beneficiada: parametros.poblacion_beneficiada,
                 empleos_directos: parametros.empleos_directos,
                 empleos_indirectos: parametros.empleos_indirectos,
-                aldea : parametros.aldea,
+                id_aldea : parametros.aldea,
                 distancia_proyecto : parametros.distancia_proyecto,
-                modificado_por: parametros.id_usuario
+                creado_por: parametros.id_usuario
             };
 
             proyectos.actualizarProyecto(data, (error, resultado) => {
@@ -173,12 +173,18 @@ module.exports = function(app, auth) {
 
     app.post('/insertar-anexo', auth, (req, res) => {
         try {
+            console.log(req.body)
             const parametros = req.body;
             const data = {
-                id_fase: parametros.id_fase,
-                url: parametros.url,
-                id_tipo_anexo: parametros.id_tipo_anexo,
                 id_referencia: parametros.id_referencia,
+                id_tipo_referencia: parametros.id_tipo_referencia,
+                id_fase: parametros.id_fase??0,
+                id_seguimiento: parametros.id_seguimiento??0,
+                nombre_anexo:parametros.nombre_anexo,
+                tipo:parametros.tipo,
+                url: parametros.url,
+                id_estado : parametros.id_estado,
+                id_tipo_documento: parametros.id_tipo_documento,
                 id_usuario: parametros.id_usuario
             };
 
@@ -195,18 +201,25 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/insertar-seguimiento', auth, (req, res) => {
+    app.put('/actualizar-anexo', auth, (req, res) => {
         try {
+            console.log(req.body)
             const parametros = req.body;
             const data = {
-                id_fase: parametros.id_fase,
-                valor: parametros.valor,
-                motivo: parametros.motivo,
-                id_proyecto: parametros.id_proyecto,
+                id_anexo:parametros.id_anexo,
+                id_referencia: parametros.id_referencia,
+                id_tipo_referencia: parametros.id_tipo_referencia,
+                id_fase: parametros.id_fase??0,
+                id_seguimiento: parametros.id_seguimiento??0,
+                nombre_anexo:parametros.nombre_anexo,
+                tipo:parametros.tipo,
+                url: parametros.url,
+                id_estado : parametros.id_estado,
+                id_tipo_documento: parametros.id_tipo_documento,
                 id_usuario: parametros.id_usuario
             };
 
-            proyectos.insertarSeguimiento(data, (error, resultado) => {
+            proyectos.actualizarAnexo(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -218,6 +231,7 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
+
 
     app.get('/listar-anexos-proyecto', auth, (req, res) => {
         try {
@@ -286,7 +300,7 @@ module.exports = function(app, auth) {
     });
 
     app.post('/proyecto', auth, (req, res) => {
-
+        console.log(req.body);
         try {
             const parametros = req.body;
             const data = {
@@ -294,8 +308,8 @@ module.exports = function(app, auth) {
                 descripcion_proyecto: parametros.descripcion_proyecto,
                 id_departamento : parametros.id_departamento,
                 id_municipio : parametros.id_municipio,
-                id_tipo_actividades: parametros.id_tipo_actividades,
-                id_tipo_infraestructura: parametros.id_tipo_infraestructura,
+                id_actividad_economica: parametros.id_actividad_economica,
+                id_infraestructura: parametros.id_infraestructura,
                 inversion_solicitada: parametros.inversion_solicitada,
                 aporte_municipal: parametros.aporte_municipal,
                 longitud: parametros.longitud,
@@ -304,7 +318,7 @@ module.exports = function(app, auth) {
                 poblacion_beneficiada: parametros.poblacion_beneficiada,
                 empleos_directos: parametros.empleos_directos,
                 empleos_indirectos: parametros.empleos_indirectos,
-                aldea : parametros.aldea,
+                id_aldea : parametros.aldea,
                 distancia_proyecto : parametros.distancia_proyecto,
                 creado_por: parametros.id_usuario
             };
@@ -318,7 +332,7 @@ module.exports = function(app, auth) {
                     res.status(200).json(cipher.cipher({
                         status: datos[0] > 0 ? 'exito' : 'fallido',
                         message: datos[1],
-                        data: []
+                        data: datos[0]
                         })); 
                 }
             });

@@ -3,7 +3,7 @@ let proyectosModel = {};
 
 proyectosModel.actualizarProyecto = (data, callback) => {
     if (connection) {
-
+        console.log(data);
         try {
             const consulta = `
             CALL SP_ACTUALIZAR_PROYECTO(
@@ -12,31 +12,31 @@ proyectosModel.actualizarProyecto = (data, callback) => {
                 ${connection.escape(data.descripcion_proyecto)},
                 ${connection.escape(data.id_departamento)},
                 ${connection.escape(data.id_municipio)},
-                ${connection.escape(data.id_tipo_actividades)},
-                ${connection.escape(data.id_tipo_infraestructura)},
+                ${connection.escape(data.id_actividad_economica)},
+                ${connection.escape(data.id_infraestructura)},
                 ${connection.escape(data.inversion_solicitada)},
                 ${connection.escape(data.aporte_municipal)},
                 ${connection.escape(data.longitud)},
                 ${connection.escape(data.latitud)},
                 ${connection.escape(data.tiempo_ejecucion)},
-                ${connection.escape(data.poblacion)},
+                ${connection.escape(data.poblacion_beneficiada)},
                 ${connection.escape(data.empleos_directos)},
                 ${connection.escape(data.empleos_indirectos)},
-                ${connection.escape(data.aldea)}
-                ${connection.escape(data.distancia_proyecto)}
-                ${connection.escape(data.modificado_por)}
+                ${connection.escape(data.id_aldea)},
+                ${connection.escape(data.distancia_proyecto)},
+                ${connection.escape(data.creado_por)}
             );
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -63,14 +63,14 @@ proyectosModel.asignarContratista = (data, callback) => {
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -96,14 +96,14 @@ proyectosModel.asignarOrdenInicio = (data, callback) => {
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -129,14 +129,14 @@ proyectosModel.asignarPresupuestoProyecto = (data, callback) => {
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -160,30 +160,30 @@ proyectosModel.crearProyecto = (data, callback) => {
                 ${connection.escape(data.descripcion_proyecto)},
                 ${connection.escape(data.id_departamento)},
                 ${connection.escape(data.id_municipio)},
-                ${connection.escape(data.id_tipo_actividades)},
-                ${connection.escape(data.id_tipo_infraestructura)},
+                ${connection.escape(data.id_aldea)},
+                ${connection.escape(data.id_actividad_economica)},
+                ${connection.escape(data.id_infraestructura)},
                 ${connection.escape(data.inversion_solicitada)},
                 ${connection.escape(data.aporte_municipal)},
-                ${connection.escape(data.longitud)},
-                ${connection.escape(data.latitud)},
                 ${connection.escape(data.tiempo_ejecucion)},
                 ${connection.escape(data.poblacion_beneficiada)},
                 ${connection.escape(data.empleos_directos)},
                 ${connection.escape(data.empleos_indirectos)},
-                ${connection.escape(data.aldea)},
                 ${connection.escape(data.distancia_proyecto)},
-                ${connection.escape(data.creado_por)},
+                ${connection.escape(data.longitud)},
+                ${connection.escape(data.latitud)},
+                ${connection.escape(data.creado_por)}
             );
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -209,14 +209,14 @@ proyectosModel.inhabilitarAnexo = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -234,24 +234,70 @@ proyectosModel.insertarAnexo = (data, callback) => {
         try {
             const consulta = `
             CALL SP_INSERTAR_ANEXO(
-                ${connection.escape(data.id_fase)},
-                ${connection.escape(data.url)},
-                ${connection.escape(data.id_tipo_anexo)},
                 ${connection.escape(data.id_referencia)},
+                ${connection.escape(data.id_tipo_referencia)},
+                ${connection.escape(data.id_fase)},
+                ${connection.escape(data.id_seguimiento)},
+                ${connection.escape(data.nombre_anexo)},
+                ${connection.escape(data.tipo)},
+                ${connection.escape(data.url)},
+                ${connection.escape(data.id_estado)},
+                ${connection.escape(data.id_tipo_documento)},
                 ${connection.escape(data.id_usuario)}
             );
             `;
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
+proyectosModel.actualizarAnexo = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_ACTUALIZAR_ANEXO(
+                ${connection.escape(data.id_anexo)},
+                ${connection.escape(data.id_referencia)},
+                ${connection.escape(data.id_tipo_referencia)},
+                ${connection.escape(data.id_fase)},
+                ${connection.escape(data.id_seguimiento)},
+                ${connection.escape(data.nombre_anexo)},
+                ${connection.escape(data.tipo)},
+                ${connection.escape(data.url)},
+                ${connection.escape(data.id_estado)},
+                ${connection.escape(data.id_tipo_documento)},
+                ${connection.escape(data.id_usuario)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
+                }
+
+            }
 
             );
         } catch (error) {
@@ -275,52 +321,17 @@ proyectosModel.inhabilitarProyecto = (data, callback) => {
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
             console.log(error);
-            callback(error, null);
-        }
-
-    } else {
-        callback("Connection not found", null);
-    }
-};
-
-proyectosModel.insertarSeguimiento = (data, callback) => {
-    if (connection) {
-
-        try {
-            const consulta = `
-            CALL SP_INSERTAR_SEGUIMIENTO(
-                ${connection.escape(data.id_fase)},
-                ${connection.escape(data.valor)},
-                ${connection.escape(data.motivo)},
-                ${connection.escape(data.id_proyecto)},
-                ${connection.escape(data.id_usuario)}
-            );
-            `;
-
-            connection.query(consulta, (error, resultado) => {
-
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
-                }
-
-            );
-        } catch (error) {
             callback(error, null);
         }
 
@@ -343,14 +354,14 @@ proyectosModel.obtenerAnexosProyecto = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -374,14 +385,14 @@ proyectosModel.obtenerDetalleProyecto = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -404,14 +415,14 @@ proyectosModel.obtenerProyectos = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -436,14 +447,14 @@ proyectosModel.obtenerHojaRuta = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -462,20 +473,20 @@ proyectosModel.obtenerProyectosMunicipio = (data, callback) => {
             const consulta = `
             CALL SP_OBTENER_PROYECTOS_X_MUNICIPIO(
                 ${connection.escape(data.id_municipio)},
-                ${connection.escape(data.id_usuario)}
+                ${connection.escape(data.id_solicitud)}
             );
             `;
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -499,14 +510,14 @@ proyectosModel.obtenerSeguimientoProyecto = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -530,14 +541,14 @@ proyectosModel.pagarProyecto = (data, callback) => {
             `;
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, resultado[0][0].response);
-                    }
-
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
                 }
+
+            }
 
             );
         } catch (error) {
@@ -562,14 +573,13 @@ proyectosModel.obtenerTiposDocumentos = (data, callback) => {
 
             connection.query(consulta, (error, resultado) => {
 
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        callback(null, resultado[0]);
-                    }
-
-                    // console.log(resultado[0]);
+                if (error) {
+                    console.log(error);
+                } else {
+                    callback(null, resultado[0]);
                 }
+
+            }
 
             );
         } catch (error) {
