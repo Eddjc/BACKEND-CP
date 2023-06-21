@@ -154,6 +154,8 @@ biModel.reporteGeneral = (data, callback) => {
 
 };
 
+
+
 biModel.reporteUPEG = (data, callback) => {
 
     if (connection) {

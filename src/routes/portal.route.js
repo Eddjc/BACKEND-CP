@@ -57,6 +57,40 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
+
+    app.get('/reporte-por-usuario',auth,  (req, res) => {
+
+        try {
+            let parametros = req.query;
+
+            const data = {
+                id_usuario:  parametros.id_usuario
+            };
+            portal.reportePorUsuario(data, (error, resultado) => {
+                if (error) {
+                    res.status(200).json({
+                        status: 'fallido',
+                        message: error,
+                        data: null
+                    });
+                } else {
+
+                    res.status(200).json({
+                        status: 'exito',
+                        message: error,
+                        data: resultado[0]
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(200).json({
+                status: 'fallido',
+                message: error,
+                data: null
+            });
+        }
+
+    });
   
 
 }
