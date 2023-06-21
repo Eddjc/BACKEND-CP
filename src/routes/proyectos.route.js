@@ -86,6 +86,24 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.get('/detalles-proyectos', auth, (req, res) => {
+
+        try {
+
+            const data = req.query;
+
+            proyectos.obtenerProyectos(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
     app.put('/asignar-supervisor', auth, (req, res) => {
 
         try {
@@ -377,6 +395,7 @@ module.exports = function(app, auth) {
             const data = {
                 id_fase: parametros.id_fase
             }
+            console.log(data)
 
             proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
                 if (error) {

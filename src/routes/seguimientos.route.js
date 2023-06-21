@@ -3,7 +3,7 @@ const manage = require('../utils/management');
 
 module.exports = function(app, auth) {
 
-    app.post('/asignar-supervisor', auht, (req, res) => {
+    app.post('/asignar-supervisor', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
@@ -60,7 +60,24 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/insertar-seguimiento', auht, (req, res) => {
+    app.get('/obtener-supervisores-proyecto', auth, (req, res) => {
+        try {
+            const data = req.query; 
+            console.log('id proyecto',data);
+
+            seguimientos.obtenerSupervisoresProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
+
+    app.post('/insertar-seguimiento', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
@@ -84,7 +101,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/inactivar-supervisor-proyecto', auht, (req, res) => {
+    app.put('/inactivar-supervisor-proyecto', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
@@ -92,8 +109,9 @@ module.exports = function(app, auth) {
                 id_proyecto: parametros.id_proyecto,
                 id_admin: parametros.id_admin
             }
+             console.log(data);
 
-            seguimientos.insertarSeguimiento(data, (error, resultado) => {
+            seguimientos.inactivarSupervisorProyecto(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {

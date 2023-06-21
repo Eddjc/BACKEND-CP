@@ -57,6 +57,7 @@ require("./src/routes/proyectos.route")(app, auth);
 require("./src/routes/usuarios.route")(app, auth);
 require("./src/routes/contratistas.route")(app, auth);
 require("./src/routes/contratos.route")(app, auth);
+require("./src/routes/seguimientos.route")(app, auth);
 
 
 
