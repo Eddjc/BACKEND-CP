@@ -27,11 +27,8 @@ module.exports = function(app, auth) {
 
     app.get('/fases-seguimientos', auth, (req, res) => {
         try {
-            const parametros = req.query;
-            const data = {
-                id_usuario: parametros.id_usuario
-            };
-
+            data = {}
+            
             seguimientos.obtenerFasesSeguimientos(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
@@ -63,7 +60,6 @@ module.exports = function(app, auth) {
     app.get('/obtener-supervisores-proyecto', auth, (req, res) => {
         try {
             const data = req.query; 
-            console.log('id proyecto',data);
 
             seguimientos.obtenerSupervisoresProyecto(data, (error, resultado) => {
                 if (error) {
@@ -109,7 +105,6 @@ module.exports = function(app, auth) {
                 id_proyecto: parametros.id_proyecto,
                 id_admin: parametros.id_admin
             }
-             console.log(data);
 
             seguimientos.inactivarSupervisorProyecto(data, (error, resultado) => {
                 if (error) {
@@ -143,6 +138,23 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.get('/ultimo-seguimiento', auth, (req, res) => {
+        try {
+            const parametros = req.query;
+            const data = {
+                id_proyecto: parametros.id_proyecto
+            };
 
+            seguimientos.obtenerProyectosSupervisor(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
 
 }

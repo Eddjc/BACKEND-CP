@@ -434,6 +434,36 @@ proyectosModel.obtenerProyectos = (data, callback) => {
     }
 };
 
+proyectosModel.obtenerProyecto = (data, callback) => {
+    if (connection) {
+        try {
+            const consulta = `
+            CALL SP_OBTENER_PROYECTO_SEGUIMIENTO(
+                ${connection.escape(data.id_proyecto)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0]);
+                }
+
+            }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
 proyectosModel.obtenerHojaRuta = (data, callback) => {
     if (connection) {
 
@@ -583,6 +613,39 @@ proyectosModel.obtenerTiposDocumentos = (data, callback) => {
 
             );
         } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
+proyectosModel.actualizarDocumento = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_ACTUALIZAR_TIPO_DOCUMENTO(
+                ${connection.escape(data.id_documento)},
+                ${connection.escape(data.id_tipo_documento)},
+                ${connection.escape(data.id_admin)}
+            );
+            `;
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
+                }
+
+            }
+
+            );
+        } catch (error) {
+            console.log(error);
             callback(error, null);
         }
 

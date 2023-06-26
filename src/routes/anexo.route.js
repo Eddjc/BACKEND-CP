@@ -44,7 +44,6 @@ module.exports = function(app) {
         try {
             const file = processPath(req.params.path).absolutePath;
             const mimetype = mime.lookup(file);
-            console.log(mimetype);
             res.setHeader('Content-Disposition', `attachment; filename=${file}`);
             res.setHeader('Content-Type', mimetype);
             res.download(file);
@@ -79,7 +78,6 @@ module.exports = function(app) {
     app.use(fileUpload());
     
     app.post('/subir/:path?', async (req, res, next) => {
-      console.log(req.files)
       if (!req.files) {
         return res.status(400).json({
           success: false,

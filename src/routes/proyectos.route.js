@@ -162,8 +162,8 @@ module.exports = function(app, auth) {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    let datos = resultado;
-                    manage.returnSuccess('', datos, res);                    
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
                 }
             });
         } catch (error) {
@@ -173,7 +173,6 @@ module.exports = function(app, auth) {
 
     app.post('/insertar-anexo', auth, (req, res) => {
         try {
-            console.log(req.body)
             const parametros = req.body;
             const data = {
                 id_referencia: parametros.id_referencia,
@@ -203,7 +202,6 @@ module.exports = function(app, auth) {
 
     app.put('/actualizar-anexo', auth, (req, res) => {
         try {
-            console.log(req.body)
             const parametros = req.body;
             const data = {
                 id_anexo:parametros.id_anexo,
@@ -235,7 +233,6 @@ module.exports = function(app, auth) {
 
     app.get('/listar-anexos-proyecto', auth, (req, res) => {
         try {
-            console.log('paramentos ',req.query);
             const parametros = req.query;
             const data = {
                 id_referencia: parametros.id_proyecto,
@@ -300,7 +297,6 @@ module.exports = function(app, auth) {
     });
 
     app.post('/proyecto', auth, (req, res) => {
-        console.log(req.body);
         try {
             const parametros = req.body;
             const data = {
@@ -348,6 +344,27 @@ module.exports = function(app, auth) {
             const data = {};
 
             proyectos.obtenerProyectos(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/proyecto', auth, (req, res) => {
+
+        try {
+            parametros = req.query
+            const data = {
+                id_proyecto:parametros.id_proyecto
+            };
+
+
+            proyectos.obtenerProyecto(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -409,7 +426,6 @@ module.exports = function(app, auth) {
             const data = {
                 id_fase: parametros.id_fase
             }
-            console.log(data)
 
             proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
                 if (error) {
@@ -422,4 +438,28 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
+
+    app.put('/docuemnto', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_documento: parametros.id_documento,
+                id_tipo_documento: parametros.id_tipo_documento,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.actualizarDocumento(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
 }

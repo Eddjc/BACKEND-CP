@@ -165,7 +165,32 @@ seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
     if (connection) {
         try {
             const consulta = `
-            CALL SP_OBTENER_PROYECTOS_SUPERVISOR();
+            CALL SP_OBTENER_PROYECTOS_ASIGNADOS_SUPERVISORES(
+                ${connection.escape(data.id_usuario)}
+            );
+            `
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                } else {
+                    callback(null, resultado[0]);
+                }
+            }
+        );
+        } catch (error) {
+            callback(error, null);
+        }
+    }
+}
+
+seguimientosModel.obtenerUltimoSeguimiento = (data, callback) => {
+    if (connection) {
+        try {
+            const consulta = `
+            CALL SP_OBTENER_ULTIMO_SEGUIMIENTO(
+                ${connection.escape(data.id_proyecto)}
+            );
             `
             connection.query(consulta, (error, resultado) => {
 
