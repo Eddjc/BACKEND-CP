@@ -18,17 +18,17 @@ module.exports = function(app, auth) {
                 id_municipio : parametros.id_municipio,
                 id_actividad_economica: parametros.id_actividad_economica,
                 id_infraestructura: parametros.id_infraestructura,
-                inversion_solicitada: parametros.inversion_solicitada,
                 aporte_municipal: parametros.aporte_municipal,
+                inversion_solicitada: parametros.inversion_solicitada,
                 longitud: parametros.longitud,
                 latitud: parametros.latitud,
                 tiempo_ejecucion: parametros.tiempo_ejecucion,
                 poblacion_beneficiada: parametros.poblacion_beneficiada,
                 empleos_directos: parametros.empleos_directos,
                 empleos_indirectos: parametros.empleos_indirectos,
-                id_aldea : parametros.aldea,
+                id_aldea : parametros.id_aldea,
                 distancia_proyecto : parametros.distancia_proyecto,
-                creado_por: parametros.id_usuario
+                creado_por: parametros.creado_por
             };
 
             proyectos.actualizarProyecto(data, (error, resultado) => {
@@ -44,6 +44,30 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.put('/actualizar-proyecto-detalle', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                monto_aprobado: parametros.monto_aprobado,
+                observaciones: parametros.observaciones,
+                id_estado : parametros.id_estado,
+                id_usuario: parametros.id_usuario
+            };
+
+            proyectos.actualizarProyectoDetalle(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
     app.put('/asignar-contratista', auth, (req, res) => {
 
         try {
@@ -376,6 +400,27 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.get('/proyecto', auth, (req, res) => {
+
+        try {
+            parametros = req.query
+            const data = {
+                id_proyecto:parametros.id_proyecto
+            };
+
+
+            proyectos.obtenerProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
 
     app.get('/proyectos-municipios', auth, (req, res) => {
 
@@ -439,7 +484,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.put('/docuemnto', auth, (req, res) => {
+    app.put('/documento', auth, (req, res) => {
 
         try {
             const parametros = req.body;
@@ -462,4 +507,48 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.post('/crear-correlativo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_departamento: parametros.id_departamento,
+                id_municipio: parametros.id_municipio,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.crearCorrelativo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/enviar-correo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                asunto: parametros.asunto,
+                correo: parametros.correo,
+                mensaje: parametros.mensaje
+            };
+
+            // console.log(data);
+            proyectos.enviarCorreo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
 }

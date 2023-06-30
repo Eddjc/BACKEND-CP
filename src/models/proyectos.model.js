@@ -1,4 +1,6 @@
 const connection = require("../../connection");
+const nodemailer = require('nodemailer');
+const cipher = require('../middleware/cipher');
 let proyectosModel = {};
 
 proyectosModel.actualizarProyecto = (data, callback) => {
@@ -48,6 +50,41 @@ proyectosModel.actualizarProyecto = (data, callback) => {
         callback("Connection not found", null);
     }
 };
+
+proyectosModel.actualizarProyectoDetalle = (data, callback) => {
+    if (connection) {
+        try {
+            const consulta = `
+            CALL SP_ACTUALIZAR_PROYECTO_DETALLE(
+                ${connection.escape(data.id_proyecto)},
+                ${connection.escape(data.monto_aprobado)},
+                ${connection.escape(data.observaciones)},
+                ${connection.escape(data.id_estado)},
+                ${connection.escape(data.id_usuario)}
+            );
+            `;
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
+                }
+
+            }
+
+            );
+        } catch (error) {
+            console.log(error);
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
 
 proyectosModel.asignarContratista = (data, callback) => {
     if (connection) {
@@ -409,7 +446,7 @@ proyectosModel.obtenerProyectos = (data, callback) => {
         try {
             const consulta = `
             CALL SP_OBTENER_PROYECTOS(
-                ${connection.escape(data.id_proyecto)}
+                ${connection.escape(data.id_usuario)}
             );
             `;
 
@@ -438,7 +475,7 @@ proyectosModel.obtenerProyecto = (data, callback) => {
     if (connection) {
         try {
             const consulta = `
-            CALL SP_OBTENER_PROYECTO_SEGUIMIENTO(
+            CALL SP_OBTENER_PROYECTO(
                 ${connection.escape(data.id_proyecto)}
             );
             `;
@@ -651,6 +688,85 @@ proyectosModel.actualizarDocumento = (data, callback) => {
 
     } else {
         callback("Connection not found", null);
+    }
+};
+
+proyectosModel.crearCorrelativo = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_OBTENER_CORRELATIVO(
+                ${connection.escape(data.id_departamento)},
+                ${connection.escape(data.id_municipio)},
+                ${connection.escape(data.id_admin)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, resultado[0][0].response);
+                }
+
+            }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
+proyectosModel.enviarCorreo = async (data, callback) => {
+    if (connection) {
+
+        try {
+            const config = nodemailer.createTransport({
+              host: 'smtp.gmail.com',
+              port: 465,
+              secure: true,
+              service: 'Gmail',
+              auth: {
+                user: 'caminosproductivos@gmail.com',
+                pass: 'fbjhbnotipirfuxj',
+              },
+            });
+        
+            const opciones = {
+              from: 'Prueba',
+              subject: data.asunto,
+              to: data.correo,
+              text: data.mensaje,
+            };
+            console.log(opciones);
+        
+            await config.sendMail(opciones, function (error, result) {
+
+                if (error) {
+                    console.log(error);
+                    callback(error, null);
+                } else {
+                    callback(null, result);
+                }
+
+            //   if (error)
+            //     return res.json(cipher.cipher({ ok: false, msg: error }));
+        
+            //   return res.json(cipher.cipher({
+            //     ok: true,
+            //     msg: result,
+            //   }));
+            });
+          } catch (error) {
+            return error;
+          }
     }
 };
 
