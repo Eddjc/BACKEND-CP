@@ -79,12 +79,13 @@ module.exports = function(app, auth) {
             const data = {
                 id_usuario: parametros.id_usuario,
                 id_proyecto: parametros.id_proyecto,
-                id_fase: parametros.id_fase,
-                fase_actual: parametros.fase_actual,
-                valor_actual: parametros.valor_actual,
-                avance: parametros.avance,
-                avance_financiero: parametros.avance_financiero,
-                observacion_proyecto: parametros.observacion_proyecto
+                fase_previa: parametros.fase_previa,
+                id_fase_asignada: parametros.id_fase_asignada,
+                avance_fisico_previo: parametros.avance_fisico_previo,
+                avance_fisico_asignado: parametros.avance_fisico_asignado,
+                valor_financiero_previo: parametros.valor_financiero_previo,
+                valor_financiero_asignado: parametros.valor_financiero_asignado,
+                descripcion: parametros.descripcion
             }
 
             seguimientos.insertarSeguimiento(data, (error, resultado) => {
@@ -110,6 +111,28 @@ module.exports = function(app, auth) {
             }
 
             seguimientos.inactivarSupervisorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/inactivar-seguimiento', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_seguimiento: parametros.id_seguimiento,
+                id_admin: parametros.id_usuario
+            }
+            console.log(data);
+
+            seguimientos.inactivarSeguimiento(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {

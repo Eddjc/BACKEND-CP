@@ -104,14 +104,14 @@ seguimientosModel.insertarSeguimiento = (data, callback) => {
             CALL SP_INSERTAR_SEGUIMIENTO(
                 ${connection.escape(data.id_usuario)}
                 ${connection.escape(data.id_proyecto)}
-                ${connection.escape(data.id_fase)},
-                ${connection.escape(data.fase_actual)},
-                ${connection.escape(data.valor_actual)}
-                ${connection.escape(data.avance)}
-                ${connection.escape(data.avance_financiero)}
-                ${connection.escape(data.observacion_proyecto)}
-            );
-            `;
+                ${connection.escape(data.fase_previa)},
+                ${connection.escape(data.id_fase_asignada)},
+                ${connection.escape(data.avance_fisico_previo)}
+                ${connection.escape(data.avance_fisico_asignado)}
+                ${connection.escape(data.valor_financiero_previo)}
+                ${connection.escape(data.valor_financiero_asignado)}
+                ${connection.escape(data.descripcion)}
+            );          `;
             connection.query(consulta, (error, resultado) => {
 
                     if (error) {
@@ -163,6 +163,37 @@ seguimientosModel.inactivarSupervisorProyecto = (data, callback) => {
         callback("Connection not found", null);
     }
 };
+
+seguimientosModel.inactivarSeguimiento = (data, callback) => {
+    if (connection) {
+        try {
+            const consulta = `
+            CALL SP_INACTIVAR_SEGUIMIENTO(
+                ${connection.escape(data.id_seguimiento)},
+                ${connection.escape(data.id_admin)}
+            );
+            `;
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado[0][0].response);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            console.log(error);
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
 
 seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
     if (connection) {
@@ -223,6 +254,7 @@ seguimientosModel.obtenerSeguimientosProyecto = (data, callback) => {
                 if (error) {
                     console.log(error);
                 } else {
+                    console.log(resultado[0]);
                     callback(null, resultado[0]);
                 }
             }
