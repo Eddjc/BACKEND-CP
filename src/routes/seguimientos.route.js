@@ -3,7 +3,7 @@ const manage = require('../utils/management');
 
 module.exports = function(app, auth) {
 
-    app.post('/asignar-supervisor', auht, (req, res) => {
+    app.post('/asignar-supervisor', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
@@ -27,11 +27,8 @@ module.exports = function(app, auth) {
 
     app.get('/fases-seguimientos', auth, (req, res) => {
         try {
-            const parametros = req.query;
-            const data = {
-                id_usuario: parametros.id_usuario
-            };
-
+            data = {}
+            
             seguimientos.obtenerFasesSeguimientos(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
@@ -60,18 +57,37 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/insertar-seguimiento', auht, (req, res) => {
+    app.get('/obtener-supervisores-proyecto', auth, (req, res) => {
+        try {
+            const data = req.query; 
+
+            seguimientos.obtenerSupervisoresProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
+
+    app.post('/insertar-seguimiento', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
-                id_tipo_fase: parametros.id_tipo_fase,
-                avance_fisico: parametros.avance_fisico,
-                descripcion: parametros.descripcion,
-                id_proyecto: parametros.id_proyecto,
                 id_usuario: parametros.id_usuario,
+                id_proyecto: parametros.id_proyecto,
+                id_fase: parametros.id_fase,
+                fase_actual: parametros.fase_actual,
+                valor_actual: parametros.valor_actual,
+                avance: parametros.avance,
+                avance_financiero: parametros.avance_financiero,
+                observacion_proyecto: parametros.observacion_proyecto
             }
 
-            seguimientos.inactivarSupervisorProyecto(data, (error, resultado) => {
+            seguimientos.insertarSeguimiento(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -84,7 +100,7 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/inactivar-supervisor-proyecto', auht, (req, res) => {
+    app.put('/inactivar-supervisor-proyecto', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
@@ -93,7 +109,7 @@ module.exports = function(app, auth) {
                 id_admin: parametros.id_admin
             }
 
-            seguimientos.insertarSeguimiento(data, (error, resultado) => {
+            seguimientos.inactivarSupervisorProyecto(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -125,6 +141,66 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.get('/ultimo-seguimiento', auth, (req, res) => {
+        try {
+            const parametros = req.query;
+            const data = {
+                id_proyecto: parametros.id_proyecto
+            };
+
+            seguimientos.obtenerProyectosSupervisor(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
+
+    app.get('/seguimientos-proyecto', auth, (req, res) => {
+        try {
+            const parametros = req.query;
+            const data = {
+                id_proyecto: parametros.id_proyecto
+            };
+
+            console.log(data);
+
+            seguimientos.obtenerSeguimientosProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
+
+    app.get('/proyecto-seguimiento', auth, (req, res) => {
+
+        try {
+            parametros = req.query
+            const data = {
+                id_proyecto:parametros.id_proyecto
+            };
+
+
+            seguimientos.obtenerProyectoSeguimiento(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
 
 
 }

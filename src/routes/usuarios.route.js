@@ -167,7 +167,6 @@ module.exports = function(app, auth) {
 
 
     app.post('/usuario',  (req, res) => {
-
         try {
             const parametros = req.body;
             const data = {

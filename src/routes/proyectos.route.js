@@ -16,19 +16,19 @@ module.exports = function(app, auth) {
                 descripcion_proyecto: parametros.descripcion_proyecto,
                 id_departamento : parametros.id_departamento,
                 id_municipio : parametros.id_municipio,
-                id_tipo_actividades: parametros.id_tipo_actividades,
-                id_tipo_infraestructura: parametros.id_tipo_infraestructura,
-                inversion_solicitada: parametros.inversion_solicitada,
+                id_actividad_economica: parametros.id_actividad_economica,
+                id_infraestructura: parametros.id_infraestructura,
                 aporte_municipal: parametros.aporte_municipal,
+                inversion_solicitada: parametros.inversion_solicitada,
                 longitud: parametros.longitud,
                 latitud: parametros.latitud,
                 tiempo_ejecucion: parametros.tiempo_ejecucion,
-                poblacion: parametros.poblacion,
+                poblacion_beneficiada: parametros.poblacion_beneficiada,
                 empleos_directos: parametros.empleos_directos,
                 empleos_indirectos: parametros.empleos_indirectos,
-                aldea : parametros.aldea,
+                id_aldea : parametros.id_aldea,
                 distancia_proyecto : parametros.distancia_proyecto,
-                modificado_por: parametros.id_usuario
+                creado_por: parametros.creado_por
             };
 
             proyectos.actualizarProyecto(data, (error, resultado) => {
@@ -44,6 +44,30 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.put('/actualizar-proyecto-detalle', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                monto_aprobado: parametros.monto_aprobado,
+                observaciones: parametros.observaciones,
+                id_estado : parametros.id_estado,
+                id_usuario: parametros.id_usuario
+            };
+
+            proyectos.actualizarProyectoDetalle(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
     app.put('/asignar-contratista', auth, (req, res) => {
 
         try {
@@ -73,9 +97,26 @@ module.exports = function(app, auth) {
         try {
 
             const data = req.query;
-            console.log('id de proyecto', data);
 
             proyectos.obtenerDetalleProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.get('/detalles-proyectos', auth, (req, res) => {
+
+        try {
+
+            const data = req.query;
+
+            proyectos.obtenerProyectos(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -145,8 +186,8 @@ module.exports = function(app, auth) {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    let datos = resultado;
-                    manage.returnSuccess('', datos, res);                    
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
                 }
             });
         } catch (error) {
@@ -158,10 +199,15 @@ module.exports = function(app, auth) {
         try {
             const parametros = req.body;
             const data = {
-                id_fase: parametros.id_fase,
-                url: parametros.url,
-                id_tipo_anexo: parametros.id_tipo_anexo,
                 id_referencia: parametros.id_referencia,
+                id_tipo_referencia: parametros.id_tipo_referencia,
+                id_fase: parametros.id_fase??0,
+                id_seguimiento: parametros.id_seguimiento??0,
+                nombre_anexo:parametros.nombre_anexo,
+                tipo:parametros.tipo,
+                url: parametros.url,
+                id_estado : parametros.id_estado,
+                id_tipo_documento: parametros.id_tipo_documento,
                 id_usuario: parametros.id_usuario
             };
 
@@ -178,18 +224,24 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.post('/insertar-seguimiento', auth, (req, res) => {
+    app.put('/actualizar-anexo', auth, (req, res) => {
         try {
             const parametros = req.body;
             const data = {
-                id_fase: parametros.id_fase,
-                valor: parametros.valor,
-                motivo: parametros.motivo,
-                id_proyecto: parametros.id_proyecto,
+                id_anexo:parametros.id_anexo,
+                id_referencia: parametros.id_referencia,
+                id_tipo_referencia: parametros.id_tipo_referencia,
+                id_fase: parametros.id_fase??0,
+                id_seguimiento: parametros.id_seguimiento??0,
+                nombre_anexo:parametros.nombre_anexo,
+                tipo:parametros.tipo,
+                url: parametros.url,
+                id_estado : parametros.id_estado,
+                id_tipo_documento: parametros.id_tipo_documento,
                 id_usuario: parametros.id_usuario
             };
 
-            proyectos.insertarSeguimiento(data, (error, resultado) => {
+            proyectos.actualizarAnexo(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -202,12 +254,13 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/listar-anexos', auth, (req, res) => {
+
+    app.get('/listar-anexos-proyecto', auth, (req, res) => {
         try {
             const parametros = req.query;
             const data = {
-                id_tipo_anexo: parametros.id_tipo_anexo,
-                id_referencia: parametros.id_referencia
+                id_referencia: parametros.id_proyecto,
+                id_tipo_referencia: parametros.id_referencia
             };
 
             proyectos.obtenerAnexosProyecto(data, (error, resultado) => {
@@ -268,7 +321,6 @@ module.exports = function(app, auth) {
     });
 
     app.post('/proyecto', auth, (req, res) => {
-
         try {
             const parametros = req.body;
             const data = {
@@ -276,8 +328,8 @@ module.exports = function(app, auth) {
                 descripcion_proyecto: parametros.descripcion_proyecto,
                 id_departamento : parametros.id_departamento,
                 id_municipio : parametros.id_municipio,
-                id_tipo_actividades: parametros.id_tipo_actividades,
-                id_tipo_infraestructura: parametros.id_tipo_infraestructura,
+                id_actividad_economica: parametros.id_actividad_economica,
+                id_infraestructura: parametros.id_infraestructura,
                 inversion_solicitada: parametros.inversion_solicitada,
                 aporte_municipal: parametros.aporte_municipal,
                 longitud: parametros.longitud,
@@ -286,7 +338,7 @@ module.exports = function(app, auth) {
                 poblacion_beneficiada: parametros.poblacion_beneficiada,
                 empleos_directos: parametros.empleos_directos,
                 empleos_indirectos: parametros.empleos_indirectos,
-                aldea : parametros.aldea,
+                id_aldea : parametros.aldea,
                 distancia_proyecto : parametros.distancia_proyecto,
                 creado_por: parametros.id_usuario
             };
@@ -300,7 +352,7 @@ module.exports = function(app, auth) {
                     res.status(200).json(cipher.cipher({
                         status: datos[0] > 0 ? 'exito' : 'fallido',
                         message: datos[1],
-                        data: []
+                        data: datos[0]
                         })); 
                 }
             });
@@ -327,11 +379,31 @@ module.exports = function(app, auth) {
         }
     });
 
+    app.get('/proyecto', auth, (req, res) => {
+
+        try {
+            parametros = req.query
+            const data = {
+                id_proyecto:parametros.id_proyecto
+            };
+
+
+            proyectos.obtenerProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
 
     app.get('/proyectos-municipios', auth, (req, res) => {
 
         try {
-            console.log('parametrso ',req.query);
             const parametros = req.query;
 
             const data = {
@@ -373,8 +445,11 @@ module.exports = function(app, auth) {
     app.get('/obtener-tipos-documentos', auth, (req, res) => {
 
         try {
-            console.log('llega aqui');
-            const data = {};
+            const parametros = req.query;
+
+            const data = {
+                id_fase: parametros.id_fase
+            }
 
             proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
                 if (error) {
@@ -383,6 +458,120 @@ module.exports = function(app, auth) {
                     manage.returnSuccess(error, resultado, res);
                 }
             });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/documento', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_documento: parametros.id_documento,
+                id_tipo_documento: parametros.id_tipo_documento,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.actualizarDocumento(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/crear-correlativo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_departamento: parametros.id_departamento,
+                id_municipio: parametros.id_municipio,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.crearCorrelativo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/enviar-correo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                asunto: parametros.asunto,
+                correo: parametros.correo,
+                mensaje: parametros.mensaje
+            };
+
+            // console.log(data);
+            proyectos.enviarCorreo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+
+
+    app.get('/obtener-tipos-documento-del-proyecto', auth, (req, res) => {
+        try {
+            const data = req.query; 
+
+            proyectos.obtenerTipoDocumentoPorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
+
+    app.put('/actualizar-documentos-revisados-por-proyectos', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_tipo_documento: parametros.id_tipo_documento,
+                id_proyecto: parametros.id_proyecto,
+                revisado: parametros.revisado,
+                id_admin: parametros.id_admin
+            };
+            
+            proyectos.actualizarDocumentosPorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                   
+                    let datos = resultado.split('|');
+                      
+                    manage.returnSuccess(datos[1], datos[0], res); 
+                                   
+                }
+            });
+
         } catch (error) {
             manage.returnError(error, res);
         }
