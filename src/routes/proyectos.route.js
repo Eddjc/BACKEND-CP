@@ -400,27 +400,6 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.get('/proyecto', auth, (req, res) => {
-
-        try {
-            parametros = req.query
-            const data = {
-                id_proyecto:parametros.id_proyecto
-            };
-
-
-            proyectos.obtenerProyecto(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess(error, resultado, res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
-
 
     app.get('/proyectos-municipios', auth, (req, res) => {
 
@@ -547,6 +526,52 @@ module.exports = function(app, auth) {
                     manage.returnSuccess(datos[1], datos[0], res);
                 }
             });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+
+
+    app.get('/obtener-tipos-documento-del-proyecto', auth, (req, res) => {
+        try {
+            const data = req.query; 
+
+            proyectos.obtenerTipoDocumentoPorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
+        }
+    });
+
+    app.put('/actualizar-documentos-revisados-por-proyectos', auth, (req, res) => {
+
+        try {
+            const parametros = req.body;
+            const data = {
+                id_tipo_documento: parametros.id_tipo_documento,
+                id_proyecto: parametros.id_proyecto,
+                revisado: parametros.revisado,
+                id_admin: parametros.id_admin
+            };
+            
+            proyectos.actualizarDocumentosPorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                   
+                    let datos = resultado.split('|');
+                      
+                    manage.returnSuccess(datos[1], datos[0], res); 
+                                   
+                }
+            });
+
         } catch (error) {
             manage.returnError(error, res);
         }

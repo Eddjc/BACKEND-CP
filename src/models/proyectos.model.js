@@ -770,4 +770,60 @@ proyectosModel.enviarCorreo = async (data, callback) => {
     }
 };
 
+proyectosModel.obtenerTipoDocumentoPorProyecto = (data, callback) => {
+    if (connection) {
+        try {
+            const consulta = `
+            CALL SP_OBTENER_TIPOS_DOCUMENTOS_X_PROYECTO(
+                ${connection.escape(data.id_proyecto)}
+            );
+            `
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                } else {
+                    callback(null, resultado[0]);
+                }
+            }
+        );
+        } catch (error) {
+            callback(error, null);
+        }
+    }
+}
+
+proyectosModel.actualizarDocumentosPorProyecto = (data, callback) => {
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_ACTUALIZAR_REVISION_DOCUMENTO_X_PROYECTO(
+                ${connection.escape(data.id_tipo_documento)},
+                ${connection.escape(data.id_proyecto)},
+                ${connection.escape(data.revisado)},
+                ${connection.escape(data.id_admin)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado[0][0].response);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+};
+
 module.exports = proyectosModel;
