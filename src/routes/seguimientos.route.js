@@ -60,6 +60,7 @@ module.exports = function(app, auth) {
     app.get('/obtener-supervisores-proyecto', auth, (req, res) => {
         try {
             const data = req.query; 
+            console.log(data);
 
             seguimientos.obtenerSupervisoresProyecto(data, (error, resultado) => {
                 if (error) {
@@ -79,14 +80,16 @@ module.exports = function(app, auth) {
             const data = {
                 id_usuario: parametros.id_usuario,
                 id_proyecto: parametros.id_proyecto,
-                fase_previa: parametros.fase_previa,
+                // id_fase_previa: parametros.id_fase_previa,
                 id_fase_asignada: parametros.id_fase_asignada,
                 avance_fisico_previo: parametros.avance_fisico_previo,
                 avance_fisico_asignado: parametros.avance_fisico_asignado,
                 valor_financiero_previo: parametros.valor_financiero_previo,
                 valor_financiero_asignado: parametros.valor_financiero_asignado,
+                metros_liniales_terminados: parametros.metros_liniales_terminados,
                 descripcion: parametros.descripcion
             }
+            console.log(data);
 
             seguimientos.insertarSeguimiento(data, (error, resultado) => {
                 if (error) {
@@ -111,6 +114,32 @@ module.exports = function(app, auth) {
             }
 
             seguimientos.inactivarSupervisorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/proyecto-seguimiento-supervisor', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_usuario: parametros.id_usuario,
+                id_proyecto: parametros.id_proyecto,
+                longitud: parametros.longitud,
+                latitud: parametros.latitud,
+                id_aldea: parametros.id_aldea,
+                fecha_inicio: parametros.fecha_inicio,
+                fecha_finalizacion: parametros.fecha_finalizacion
+            }
+
+            seguimientos.actualizarProyectoSupervisor(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -170,8 +199,9 @@ module.exports = function(app, auth) {
             const data = {
                 id_proyecto: parametros.id_proyecto
             };
+            console.log(data)
 
-            seguimientos.obtenerProyectosSupervisor(data, (error, resultado) => {
+            seguimientos.obtenerUltimoSeguimiento(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
