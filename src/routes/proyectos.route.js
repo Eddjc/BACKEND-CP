@@ -7,7 +7,7 @@ module.exports = function(app, auth) {
 
 
     app.put('/actualizar-proyecto', auth, (req, res) => {
-
+        console.log(req.body)
         try {
             const parametros = req.body;
             const data = {

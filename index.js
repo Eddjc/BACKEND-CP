@@ -23,7 +23,6 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({origins: ['*']}));
-require("./src/routes/bi.route")(app, auth);
 
 /* Cors */
 app.use(function(req, res, next) {
@@ -48,6 +47,7 @@ app.use(express.static('./public'));
 
 
 /* ============== Rutas gestionadas ==============*/
+require("./src/routes/bi.route")(app, auth);
 require("./src/routes/portal.route")(app, auth);
 require("./src/routes/login.route")(app, auth);
 require("./src/routes/anexo.route")(app, auth);

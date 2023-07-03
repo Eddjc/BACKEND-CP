@@ -10,8 +10,10 @@ module.exports = function(app, auth) {
 
             let parameters = req.query;
 
+            console.log(req.query);
+
             const data = {
-                id:  parameters.id
+                id_usuario:  parameters.id_usuario
             };
 
             bi.obtenerURLBi(data, (error, resultado) => {

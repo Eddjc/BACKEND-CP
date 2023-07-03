@@ -8,8 +8,8 @@ biModel.obtenerURLBi = (data, callback) => {
 
         try {
             const consulta = `
-            CALL SP_OBTENER_URL_BI(
-                ${connection.escape(data.id)}
+            CALL SP_OBTENER_BI(
+                ${connection.escape(data.id_usuario)}
             );
             `;
 
