@@ -2,7 +2,6 @@ const connection = require("../../connection");
 let loginModel = {};
 
 loginModel.login = (data, callback) => {
-    console.log('data modelo ' , data );
     if (connection) {
 
         try {

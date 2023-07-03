@@ -99,18 +99,18 @@ seguimientosModel.obtenerSupervisoresProyecto = (data, callback) => {
 seguimientosModel.insertarSeguimiento = (data, callback) => {
     if (connection) {
 
-        // ${connection.escape(data.id_fase_previa)},
         try {
             const consulta = `
             CALL SP_INSERTAR_SEGUIMIENTO(
-                ${connection.escape(data.id_usuario)}
-                ${connection.escape(data.id_proyecto)}
+                ${connection.escape(data.id_usuario)},
+                ${connection.escape(data.id_proyecto)},
+                ${connection.escape(data.id_fase_previa)},
                 ${connection.escape(data.id_fase_asignada)},
                 ${connection.escape(data.avance_fisico_previo)},
                 ${connection.escape(data.avance_fisico_asignado)},
                 ${connection.escape(data.valor_financiero_previo)},
                 ${connection.escape(data.valor_financiero_asignado)},
-                ${connection.escape(data.metros_liniales_terminados)},
+                ${connection.escape(data.metros_lineales_terminados)},
                 ${connection.escape(data.descripcion)}
             );          `;
             connection.query(consulta, (error, resultado) => {
@@ -231,29 +231,6 @@ seguimientosModel.inactivarSeguimiento = (data, callback) => {
 };
 
 
-seguimientosModel.obtenerUltimoSeguimiento = (data, callback) => {
-    if (connection) {
-        try {
-            const consulta = `
-            CALL SP_OBTENER_ULTIMO_SEGUIMIENTO(
-                ${connection.escape(data.id_usuario)}
-            );
-            `
-            connection.query(consulta, (error, resultado) => {
-
-                if (error) {
-                    console.log(error);
-                } else {
-                    callback(null, resultado[0]);
-                }
-            }
-        );
-        } catch (error) {
-            callback(error, null);
-        }
-    }
-}
-
 seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
     if (connection) {
         try {
@@ -269,6 +246,7 @@ seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
                 } else {
                     callback(null, resultado[0]);
                 }
+
             }
         );
         } catch (error) {
@@ -279,10 +257,12 @@ seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
 
 seguimientosModel.obtenerUltimoSeguimiento = (data, callback) => {
     if (connection) {
+        console.log(data)
         try {
             const consulta = `
             CALL SP_OBTENER_ULTIMO_SEGUIMIENTO(
-                ${connection.escape(data.id_proyecto)}
+                ${connection.escape(data.id_proyecto)},
+                ${connection.escape(data.id_usuario)}
             );
             `
             connection.query(consulta, (error, resultado) => {
@@ -313,7 +293,30 @@ seguimientosModel.obtenerSeguimientosProyecto = (data, callback) => {
                 if (error) {
                     console.log(error);
                 } else {
-                    console.log(resultado[0]);
+                    callback(null, resultado[0]);
+                }
+            }
+        );
+        } catch (error) {
+            callback(error, null);
+        }
+    }
+}
+
+seguimientosModel.obtenerAnexosSeguimiento = (data, callback) => {
+    if (connection) {
+        try {
+            const consulta = `
+            CALL SP_OBTENER_ANEXOS_SEGUIMIENTO(
+                ${connection.escape(data.id_seguimiento)},
+                ${connection.escape(data.id_tipo_referencia)}
+            );
+            `
+            connection.query(consulta, (error, resultado) => {
+
+                if (error) {
+                    console.log(error);
+                } else {
                     callback(null, resultado[0]);
                 }
             }

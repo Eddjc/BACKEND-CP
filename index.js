@@ -23,7 +23,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({origins: ['*']}));
-require("./src/routes/bi.route")(app, auth);
+require("./src/routes/reportes.route")(app, auth);
 
 /* Cors */
 app.use(function(req, res, next) {
@@ -50,6 +50,7 @@ app.use(express.static('./public'));
 /* ============== Rutas gestionadas ==============*/
 require("./src/routes/portal.route")(app, auth);
 require("./src/routes/login.route")(app, auth);
+require("./src/routes/bi.route")(app, auth);
 require("./src/routes/anexo.route")(app, auth);
 require("./src/routes/general.route")(app, auth);
 require("./src/routes/proyectos.route")(app, auth);
@@ -72,13 +73,15 @@ require("./src/routes/seguimientos.route")(app, auth);
 // });
 
 // const options = {
+//     key: fs.readFileSync('/etc/letsencrypt/live/sae.sit.gob.hn/privkey.pem', 'utf-8'),
+//     cert: fs.readFileSync('/etc/letsencrypt/live/sae.sit.gob.hn/fullchain.pem', 'utf-8')
 // 	key: fs.readFileSync('C:/ssl/ssl.key', 'utf-8'),
 // 	cert: fs.readFileSync('C:/ssl/ssl.crt', 'utf-8'),
 // 	ca: [ fs.readFileSync('C:/ssl/ssl.CA', 'utf-8') ]
 // };
 
-// https.createServer(options, app).listen( 5000, function(req, res) {
-// 	console.log(`Server on port 5000`);
+// https.createServer(options, app).listen( 3500, function(req, res) {
+//     console.log(`Server on port 3500`);
 // });
 app.listen(3501, function(req, res) {
     console.log(`Server on port 3501`);

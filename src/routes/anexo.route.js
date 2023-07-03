@@ -15,8 +15,6 @@ module.exports = function(app) {
     const title = req.body.title;
     const file = req.file;
 
-    console.log(title);
-    console.log(file);
     res.sendStatus(200);
     
   });
