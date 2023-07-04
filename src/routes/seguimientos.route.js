@@ -214,7 +214,8 @@ module.exports = function(app, auth) {
         try {
             const parametros = req.query;
             const data = {
-                id_proyecto: parametros.id_proyecto
+                id_proyecto: parametros.id_proyecto,
+                id_usuario: parametros.id_usuario
             };
 
             seguimientos.obtenerSeguimientosProyecto(data, (error, resultado) => {
