@@ -106,7 +106,7 @@ module.exports = function(app, auth) {
 
     });
 
-    app.get('/reporte-general', (req, res) => {
+    app.get('/reporte-general-cp', (req, res) => {
 
         try {
 
@@ -285,6 +285,40 @@ module.exports = function(app, auth) {
             const data = {};
 
             reportes.reporteConPro(data, (error, resultado) => {
+                if (error) {
+                    res.status(200).json({
+                        status: 'fallido',
+                        message: error,
+                        data: null
+                    });
+                } else {
+
+                    res.status(200).json({
+                        status: 'exito',
+                        message: error,
+                        data: resultado[0]
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(200).json({
+                status: 'fallido',
+                message: error,
+                data: null
+            });
+        }
+
+    });
+    
+    app.get('/reporte-seguimientos-cp', (req, res) => {
+
+        try {
+
+            let parameters = req.query;
+
+            const data = {};
+
+            reportes.reporteSeguimiento(data, (error, resultado) => {
                 if (error) {
                     res.status(200).json({
                         status: 'fallido',

@@ -10,8 +10,6 @@ module.exports = function(app, auth) {
 
             let parameters = req.query;
 
-            console.log(req.query);
-
             const data = {
                 id_usuario:  parameters.id_usuario
             };

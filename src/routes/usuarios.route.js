@@ -169,6 +169,7 @@ module.exports = function(app, auth) {
     app.post('/usuario',  (req, res) => {
         try {
             const parametros = req.body;
+		console.log(parametros);
             const data = {
                 dni: parametros.dni,
                 nombre_usuario: parametros.nombre_usuario,
