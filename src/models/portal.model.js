@@ -36,9 +36,8 @@ portalModel.obtenerAnexosPortal = (data, callback) => {
 
         try {
             const consulta = `
-            CALL SP_OBTENER_ANEXOS(
-                ${connection.escape(data.id_referencia)},
-                ${connection.escape(data.id_tipo_referencia)}
+            CALL SP_OBTENER_ANEXOS_PORTAL(
+                ${connection.escape(data.id_referencia)}
             );
             `;
 
