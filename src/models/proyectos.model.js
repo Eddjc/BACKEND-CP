@@ -285,7 +285,6 @@ proyectosModel.insertarAnexo = (data, callback) => {
             `;
 
             connection.query(consulta, (error, resultado) => {
-
                 if (error) {
                     console.log(error);
                     callback(error, null);
@@ -745,7 +744,6 @@ proyectosModel.enviarCorreo = async (data, callback) => {
               to: data.correo,
               text: data.mensaje,
             };
-            console.log(opciones);
         
             await config.sendMail(opciones, function (error, result) {
 

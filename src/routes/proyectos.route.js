@@ -364,8 +364,10 @@ module.exports = function(app, auth) {
     app.get('/proyectos', auth, (req, res) => {
 
         try {
-
-            const data = {};
+            parametros = req.query
+            const data = {
+                id_usuario: parametros.id_usuario
+            };
 
             proyectos.obtenerProyectos(data, (error, resultado) => {
                 if (error) {
@@ -518,7 +520,6 @@ module.exports = function(app, auth) {
                 mensaje: parametros.mensaje
             };
 
-            // console.log(data);
             proyectos.enviarCorreo(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);

@@ -188,7 +188,6 @@ generalModel.obtenerTiposInfraestructuras = (data, callback) => {
 
                 }
                 );
-                // console.log(consulta);
         } catch (error) {
             callback(error, null);
         }
