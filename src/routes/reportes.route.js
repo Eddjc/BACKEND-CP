@@ -347,5 +347,39 @@ module.exports = function(app, auth) {
 	
 
 
+    app.get('/reporte-general-cp-red', (req, res) => {
+
+        try {
+
+            let parameters = req.query;
+
+            const data = {};
+
+            reportes.reporteGeneralRed(data, (error, resultado) => {
+                if (error) {
+                    res.status(200).json({
+                        status: 'fallido',
+                        message: error,
+                        data: null
+                    });
+                } else {
+
+                    res.status(200).json({
+                        status: 'exito',
+                        message: error,
+                        data: resultado[0]
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(200).json({
+                status: 'fallido',
+                message: error,
+                data: null
+            });
+        }
+
+    });
+
 	
 }

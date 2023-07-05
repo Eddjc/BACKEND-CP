@@ -285,7 +285,9 @@ seguimientosModel.obtenerSeguimientosProyecto = (data, callback) => {
         try {
             const consulta = `
             CALL SP_OBTENER_SEGUIMIENTOS_PROYECTO(
-                ${connection.escape(data.id_proyecto)}
+                ${connection.escape(data.id_proyecto)},
+                ${connection.escape(data.id_usuario)}
+
             );
             `
             connection.query(consulta, (error, resultado) => {
