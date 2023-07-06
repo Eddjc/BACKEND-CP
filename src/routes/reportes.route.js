@@ -109,7 +109,6 @@ module.exports = function(app, auth) {
     });
 
     app.get('/reporte-general-cp', (req, res) => {
-    app.get('/reporte-general-cp', (req, res) => {
 
         try {
 
