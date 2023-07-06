@@ -305,6 +305,66 @@ reportesModel.reporteConPro = (data, callback) => {
     }
 
 };
+reportesModel.reporteGeneralRed = (data, callback) => {
+
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_VER_REPORTE_GENERAL_RED();
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+
+};
+
+reportesModel.reporteSeguimiento = (data, callback) => {
+
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_VER_SEGUIMIENTOS_CP()
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+
+};
+
 
 reportesModel.crearUsuarioLogin = (data, callback) => {
 
