@@ -18,7 +18,6 @@ cipher.decipher = (req, res, next) => {
         req.query = newquery;
     } else {
         data = req.body;
-        console.log(data)
         let newbody = JSON.parse(d2(data));
         const newJson = newbody.updates.reduce((acc, curr) => {
             acc[curr.param] = curr.value;
