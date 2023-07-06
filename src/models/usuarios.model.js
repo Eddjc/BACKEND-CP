@@ -94,7 +94,7 @@ usuariosModel.crearUsuario = (data, callback) => {
             );
             `;
             connection.query(consulta, (error, resultado) => {
-
+                console.log(consulta)
                     if (error) {
                         console.log(error);
                     } else {
