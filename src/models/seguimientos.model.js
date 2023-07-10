@@ -230,7 +230,6 @@ seguimientosModel.inactivarSeguimiento = (data, callback) => {
     }
 };
 
-
 seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
     if (connection) {
         try {
@@ -257,7 +256,6 @@ seguimientosModel.obtenerProyectosSupervisor = (data, callback) => {
 
 seguimientosModel.obtenerUltimoSeguimiento = (data, callback) => {
     if (connection) {
-        console.log(data)
         try {
             const consulta = `
             CALL SP_OBTENER_ULTIMO_SEGUIMIENTO(
