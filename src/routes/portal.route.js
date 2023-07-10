@@ -8,9 +8,10 @@ module.exports = function(app, auth) {
     app.get('/portal-ciudadano', (req, res) => {
 
         try {
-
-            const data = {};
-
+            const parametros = req.query;
+            const data = {
+                id_usuario: parametros.id_usuario == 'null' ? 1 : parametros.id_usuario 
+            };
             portal.portalCiudadano(data, (error, resultado) => {
                 if (error) {
                     res.status(200).json({
