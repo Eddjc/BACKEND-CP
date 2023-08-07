@@ -26,48 +26,6 @@ module.exports = function(app, auth) {
         }
     });
 
-    // app.get('/obtener-barrios', auth, (req, res) => {
-
-    //     try {
-
-    //         const params = req.query;
-    //         const data = {
-    //             id_caserio: params.id_caserio
-    //         };
-
-    //         general.obtenerBarrios(data, (error, resultado) => {
-    //             if (error) {
-    //                 manage.returnError(error, res);
-    //             } else {
-    //                 manage.returnSuccess(error, resultado, res);
-    //             }
-    //         });
-    //     } catch (error) {
-    //         manage.returnError(error, res);
-    //     }
-    // });
-    
-    // app.get('/obtener-caserios', auth, (req, res) => {
-
-    //     try {
-
-    //         const params = req.query;
-    //         const data = {
-    //             id_aldea: params.id_aldea
-    //         };
-
-    //         general.obtenerCaserios(data, (error, resultado) => {
-    //             if (error) {
-    //                 manage.returnError(error, res);
-    //             } else {
-    //                 manage.returnSuccess(error, resultado, res);
-    //             }
-    //         });
-    //     } catch (error) {
-    //         manage.returnError(error, res);
-    //     }
-    // });
-
     app.get('/obtener-departamentos',  (req, res) => {
 
         try {

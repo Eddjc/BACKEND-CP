@@ -1,38 +1,6 @@
 const connection = require("../../connection");
 let portalModel = {};
 
-portalModel.portalCiudadano = (data, callback) => {
-
-    if (connection) {
-
-        try {
-            const consulta = `
-            CALL SP_VER_PORTAL_CIUDADANO(
-                ${connection.escape(data.id_usuario)}
-            );
-            `;
-
-            connection.query(consulta, (error, resultado) => {
-
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        callback(null, resultado);
-                    }
-
-                }
-
-            );
-        } catch (error) {
-            callback(error, null);
-        }
-
-    } else {
-        callback("Connection not found", null);
-    }
-
-};
-
 portalModel.obtenerAnexosPortal = (data, callback) => {
     if (connection) {
 
@@ -64,7 +32,37 @@ portalModel.obtenerAnexosPortal = (data, callback) => {
     }
 };
 
+portalModel.portalCiudadano = (data, callback) => {
 
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_VER_PORTAL_CIUDADANO(
+                ${connection.escape(data.id_usuario)}
+            );
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+
+};
 
 portalModel.reportePorUsuario = (data, callback) => {
 

@@ -5,7 +5,6 @@ const cipher = require('../middleware/cipher');
 // Exportar Rutas
 module.exports = function(app, auth) {
 
-
     app.put('/actualizar-proyecto', auth, (req, res) => {
 
         try {
@@ -68,18 +67,76 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
-    app.put('/asignar-contratista', auth, (req, res) => {
+
+    app.put('/actualizar-documentos-revisados-por-proyectos', auth, (req, res) => {
 
         try {
             const parametros = req.body;
             const data = {
+                id_tipo_documento: parametros.id_tipo_documento,
                 id_proyecto: parametros.id_proyecto,
-                contratista: parametros.contratista,
-                id_admin: parametros.id_admin,
-                id_institucion: parametros.id_institucion
+                revisado: parametros.revisado,
+                id_admin: parametros.id_admin
+            };
+            // console.log(data);
+            
+            proyectos.actualizarDocumentosPorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                   
+                    let datos = resultado.split('|');
+                      
+                    manage.returnSuccess(datos[1], datos[0], res); 
+                                   
+                }
+            });
+
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.put('/actualizar-anexo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_anexo:parametros.id_anexo,
+                id_referencia: parametros.id_referencia,
+                id_tipo_referencia: parametros.id_tipo_referencia,
+                id_fase: parametros.id_fase??0,
+                id_seguimiento: parametros.id_seguimiento??0,
+                nombre_anexo:parametros.nombre_anexo,
+                tipo:parametros.tipo,
+                url: parametros.url,
+                id_estado : parametros.id_estado,
+                id_tipo_documento: parametros.id_tipo_documento,
+                id_usuario: parametros.id_usuario
             };
 
-            proyectos.asignarContratista(data, (error, resultado) => {
+            proyectos.actualizarAnexo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/crear-correlativo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_departamento: parametros.id_departamento,
+                id_municipio: parametros.id_municipio,
+                id_admin: parametros.id_admin
+            };
+
+            proyectos.crearCorrelativo(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
@@ -128,22 +185,43 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.put('/asignar-supervisor', auth, (req, res) => {
+    app.put('/documento', auth, (req, res) => {
 
         try {
             const parametros = req.body;
             const data = {
-                id_proyecto: parametros.id_proyecto,
-                supervisor: parametros.supervisor,
-                id_admin: parametros.id_admin,
-                id_institucion: parametros.id_institucion
+                id_documento: parametros.id_documento,
+                id_tipo_documento: parametros.id_tipo_documento,
+                id_admin: parametros.id_admin
             };
 
-            proyectos.asignarSupervisor(data, (error, resultado) => {
+            proyectos.actualizarDocumento(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
                     let datos = resultado.split('|');
+                    manage.returnSuccess(datos[1], datos[0], res);                    
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
+    app.post('/enviar-correo', auth, (req, res) => {
+        try {
+            const parametros = req.body;
+            const data = {
+                id_proyecto: parametros.id_proyecto,
+                asunto: parametros.asunto,
+                correo: parametros.correo,
+                mensaje: parametros.mensaje
+            };
+
+            proyectos.enviarCorreo(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
                     manage.returnSuccess(datos[1], datos[0], res);
                 }
             });
@@ -181,7 +259,6 @@ module.exports = function(app, auth) {
                 id_proyecto: parametros.id_proyecto,
                 id_admin: parametros.id_admin
             };
-
             proyectos.inhabilitarProyecto(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
@@ -224,37 +301,6 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.put('/actualizar-anexo', auth, (req, res) => {
-        try {
-            const parametros = req.body;
-            const data = {
-                id_anexo:parametros.id_anexo,
-                id_referencia: parametros.id_referencia,
-                id_tipo_referencia: parametros.id_tipo_referencia,
-                id_fase: parametros.id_fase??0,
-                id_seguimiento: parametros.id_seguimiento??0,
-                nombre_anexo:parametros.nombre_anexo,
-                tipo:parametros.tipo,
-                url: parametros.url,
-                id_estado : parametros.id_estado,
-                id_tipo_documento: parametros.id_tipo_documento,
-                id_usuario: parametros.id_usuario
-            };
-
-            proyectos.actualizarAnexo(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    let datos = resultado.split('|');
-                    manage.returnSuccess(datos[1], datos[0], res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
-
-
     app.get('/listar-anexos-proyecto', auth, (req, res) => {
         try {
             const parametros = req.query;
@@ -275,25 +321,40 @@ module.exports = function(app, auth) {
         }
     });
 
-    app.put('/pagar-proyecto', auth, (req, res) => {
+    app.get('/obtener-tipos-documentos', auth, (req, res) => {
 
         try {
-            const parametros = req.body;
-            const data = {
-                id_proyecto: parametros.id_proyecto,
-                id_admin: parametros.id_admin
-            };
+            const parametros = req.query;
 
-            proyectos.pagarProyecto(data, (error, resultado) => {
+            const data = {
+                id_fase: parametros.id_fase
+            }
+
+            proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
                 } else {
-                    let datos = resultado.split('|');
-                    manage.returnSuccess(datos[1], datos[0], res);
+                    manage.returnSuccess(error, resultado, res);
                 }
             });
         } catch (error) {
             manage.returnError(error, res);
+        }
+    });
+
+    app.get('/obtener-tipos-documento-del-proyecto', auth, (req, res) => {
+        try {
+            const data = req.query; 
+
+            proyectos.obtenerTipoDocumentoPorProyecto(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess(error, resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);            
         }
     });
 
@@ -402,7 +463,6 @@ module.exports = function(app, auth) {
         }
     });
 
-
     app.get('/proyectos-municipios', auth, (req, res) => {
 
         try {
@@ -443,138 +503,5 @@ module.exports = function(app, auth) {
         }
 
     });
-
-    app.get('/obtener-tipos-documentos', auth, (req, res) => {
-
-        try {
-            const parametros = req.query;
-
-            const data = {
-                id_fase: parametros.id_fase
-            }
-
-            proyectos.obtenerTiposDocumentos(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess(error, resultado, res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
-
-    app.put('/documento', auth, (req, res) => {
-
-        try {
-            const parametros = req.body;
-            const data = {
-                id_documento: parametros.id_documento,
-                id_tipo_documento: parametros.id_tipo_documento,
-                id_admin: parametros.id_admin
-            };
-
-            proyectos.actualizarDocumento(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    let datos = resultado.split('|');
-                    manage.returnSuccess(datos[1], datos[0], res);                    
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
-
-    app.post('/crear-correlativo', auth, (req, res) => {
-        try {
-            const parametros = req.body;
-            const data = {
-                id_departamento: parametros.id_departamento,
-                id_municipio: parametros.id_municipio,
-                id_admin: parametros.id_admin
-            };
-
-            proyectos.crearCorrelativo(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    let datos = resultado.split('|');
-                    manage.returnSuccess(datos[1], datos[0], res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
-
-    app.post('/enviar-correo', auth, (req, res) => {
-        try {
-            const parametros = req.body;
-            const data = {
-                id_proyecto: parametros.id_proyecto,
-                asunto: parametros.asunto,
-                correo: parametros.correo,
-                mensaje: parametros.mensaje
-            };
-
-            proyectos.enviarCorreo(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess(datos[1], datos[0], res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
-
-
-
-    app.get('/obtener-tipos-documento-del-proyecto', auth, (req, res) => {
-        try {
-            const data = req.query; 
-
-            proyectos.obtenerTipoDocumentoPorProyecto(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess(error, resultado, res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);            
-        }
-    });
-
-    app.put('/actualizar-documentos-revisados-por-proyectos', auth, (req, res) => {
-
-        try {
-            const parametros = req.body;
-            const data = {
-                id_tipo_documento: parametros.id_tipo_documento,
-                id_proyecto: parametros.id_proyecto,
-                revisado: parametros.revisado,
-                id_admin: parametros.id_admin
-            };
-            
-            proyectos.actualizarDocumentosPorProyecto(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                   
-                    let datos = resultado.split('|');
-                      
-                    manage.returnSuccess(datos[1], datos[0], res); 
-                                   
-                }
-            });
-
-        } catch (error) {
-            manage.returnError(error, res);
-        }
-    });
+    
 }

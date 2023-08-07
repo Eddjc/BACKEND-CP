@@ -5,6 +5,25 @@ const manage = require('../utils/management');
 // Exportar Rutas
 module.exports = function(app, auth) {
 
+    app.get('/listar-anexos-portal', (req, res) => {
+        try {
+            const parametros = req.query;
+            const data = {
+                id_referencia: parametros.id_referencia
+            };
+
+            portal.obtenerAnexosPortal(data, (error, resultado) => {
+                if (error) {
+                    manage.returnError(error, res);
+                } else {
+                    manage.returnSuccess('', resultado, res);
+                }
+            });
+        } catch (error) {
+            manage.returnError(error, res);
+        }
+    });
+
     app.get('/portal-ciudadano', (req, res) => {
 
         try {
@@ -36,26 +55,6 @@ module.exports = function(app, auth) {
             });
         }
 
-    });
-
-
-    app.get('/listar-anexos-portal', (req, res) => {
-        try {
-            const parametros = req.query;
-            const data = {
-                id_referencia: parametros.id_referencia
-            };
-
-            portal.obtenerAnexosPortal(data, (error, resultado) => {
-                if (error) {
-                    manage.returnError(error, res);
-                } else {
-                    manage.returnSuccess('', resultado, res);
-                }
-            });
-        } catch (error) {
-            manage.returnError(error, res);
-        }
     });
 
     app.get('/reporte-por-usuario',auth,  (req, res) => {
@@ -91,6 +90,5 @@ module.exports = function(app, auth) {
         }
 
     });
-  
 
 }

@@ -12,7 +12,7 @@ const app = express();
 
 /* ============== Middlewares ============== */
 const auth = require('./src/middleware/auth');
-const ip = require('./src/middleware/ip');
+//const ip = require('./src/middleware/ip');
 
 /* ============== Middlewares Archivos Pablo ============== */
 const enoent = require('./src/middleware/enoent');
@@ -55,10 +55,7 @@ require("./src/routes/anexo.route")(app, auth);
 require("./src/routes/general.route")(app, auth);
 require("./src/routes/proyectos.route")(app, auth);
 require("./src/routes/usuarios.route")(app, auth);
-require("./src/routes/contratistas.route")(app, auth);
-require("./src/routes/contratos.route")(app, auth);
 require("./src/routes/seguimientos.route")(app, auth);
-
 
 
 // const http = require('http').createServer(app, {
