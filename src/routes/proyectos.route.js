@@ -259,7 +259,6 @@ module.exports = function(app, auth) {
                 id_proyecto: parametros.id_proyecto,
                 id_admin: parametros.id_admin
             };
-
             proyectos.inhabilitarProyecto(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);

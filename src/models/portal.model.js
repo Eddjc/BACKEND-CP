@@ -38,7 +38,9 @@ portalModel.portalCiudadano = (data, callback) => {
 
         try {
             const consulta = `
-            CALL SP_VER_PORTAL_CIUDADANO();
+            CALL SP_VER_PORTAL_CIUDADANO(
+                ${connection.escape(data.id_usuario)}
+            );
             `;
 
             connection.query(consulta, (error, resultado) => {

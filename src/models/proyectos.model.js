@@ -4,7 +4,6 @@ let proyectosModel = {};
 
 proyectosModel.actualizarProyecto = (data, callback) => {
     if (connection) {
-        console.log(data);
         try {
             const consulta = `
             CALL SP_ACTUALIZAR_PROYECTO(
@@ -28,6 +27,7 @@ proyectosModel.actualizarProyecto = (data, callback) => {
                 ${connection.escape(data.creado_por)}
             );
             `;
+            console.log(consulta)
             connection.query(consulta, (error, resultado) => {
 
                 if (error) {
