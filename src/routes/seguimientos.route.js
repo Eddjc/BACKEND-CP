@@ -157,7 +157,6 @@ module.exports = function(app, auth) {
                 id_seguimiento: parametros.id_seguimiento,
                 id_admin: parametros.id_usuario
             }
-
             seguimientos.inactivarSeguimiento(data, (error, resultado) => {
                 if (error) {
                     manage.returnError(error, res);
@@ -271,6 +270,5 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
-
 
 }

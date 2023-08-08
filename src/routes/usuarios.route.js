@@ -1,11 +1,8 @@
 // Modelos requeridos
 const usuarios = require('../models/usuarios.model');
-const bcrypt = require('bcryptjs');
-const saltRounds = 10;
-const jwt = require('jsonwebtoken');
 const manage = require('../utils/management');
 const CryptoJS = require('crypto-js');
-const usuariosModel = require('../models/usuarios.model');
+
 // Exportar Rutas
 module.exports = function(app, auth) {
 
@@ -136,7 +133,6 @@ module.exports = function(app, auth) {
         }
     });
 
-
      app.put('/actualizar-permiso', auth, (req, res) => {
 
         try {
@@ -164,7 +160,6 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
-
 
     app.post('/usuario',  (req, res) => {
         try {

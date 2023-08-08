@@ -204,7 +204,6 @@ usuariosModel.permisosUsuario = (data, callback) => {
     }
 };
 
-
 usuariosModel.actualizarPermiso = (data, callback) => {
     if (connection) {
 
