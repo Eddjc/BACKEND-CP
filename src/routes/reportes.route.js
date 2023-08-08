@@ -1,6 +1,5 @@
 // Modelos requeridos
 const reportes = require('../models/reportes.model');
-const manage = require('../utils/management');
 
 // Exportar Rutas
 module.exports = function(app, auth) {
@@ -109,6 +108,19 @@ module.exports = function(app, auth) {
 
     app.post('/usuario-login',  (req, res) => {
         try {
+            const parametros = req.body;
+            const data = {
+                dni: parametros.dni,
+                nombre_usuario: parametros.nombre_usuario,
+                correo: parametros.correo,
+                direccion: parametros.direccion,
+                telefono: parametros.telefono,
+                id_rol: parametros.id_rol,                
+                id_departamento: parametros.id_departamento,
+                id_municipio: parametros.id_municipio,
+                estado: parametros.estado,
+                creado_por: parametros.creado_por
+            };
 
             reportes.crearUsuarioLogin(data, (error, resultado) => {
                 if (error) {
@@ -122,6 +134,4 @@ module.exports = function(app, auth) {
             manage.returnError(error, res);
         }
     });
-
-	
 }

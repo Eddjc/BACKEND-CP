@@ -131,34 +131,4 @@ reportesModel.crearUsuarioLogin = (data, callback) => {
 
 };
 
-reportesModel.reporteSeguimiento = (data, callback) => {
-
-    if (connection) {
-
-        try {
-            const consulta = `
-            CALL SP_VER_SEGUIMIENTOS_CP()
-            `;
-
-            connection.query(consulta, (error, resultado) => {
-
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        callback(null, resultado);
-                    }
-
-                }
-
-            );
-        } catch (error) {
-            callback(error, null);
-        }
-
-    } else {
-        callback("Connection not found", null);
-    }
-
-};
-
 module.exports = reportesModel;
