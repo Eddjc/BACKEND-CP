@@ -91,6 +91,36 @@ reportesModel.reporteSeguimiento = (data, callback) => {
 
 };
 
+reportesModel.reporteSefin = (data, callback) => {
+
+    if (connection) {
+
+        try {
+            const consulta = `
+            CALL SP_VER_REPORTE_SEFIN()
+            `;
+
+            connection.query(consulta, (error, resultado) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        callback(null, resultado);
+                    }
+
+                }
+
+            );
+        } catch (error) {
+            callback(error, null);
+        }
+
+    } else {
+        callback("Connection not found", null);
+    }
+
+};
+
 reportesModel.crearUsuarioLogin = (data, callback) => {
 
     if (connection) {
