@@ -107,7 +107,7 @@ module.exports = function(app, auth) {
 
     });
 
-    app.get('/reporte-sefin-cp', (req, res) => {
+    app.get('/reporte-sefin', (req, res) => {
 
         try {
 
