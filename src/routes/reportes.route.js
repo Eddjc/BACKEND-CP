@@ -141,6 +141,55 @@ module.exports = function(app, auth) {
 
     });
 
+    app.get('/reporte-diger', (req, res, next) => {
+
+        try {
+
+            let parameters = req.query;
+            const data = {
+                token: parameters.access
+            };
+
+            if (!data.token) {
+                return res.status(403).json({
+                    message: "Token not found"
+                });
+            } else {
+                if (data.token == 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNiIsInJvbCI6IjUiLCJ1c2VyIjoiY29uc3VsdGEgZGUgaW5mb3JtYWNpb24iLCJpYXQiOjE2NzUxMjExMDgsImV4cCI6MTY3NTEyODMwOH0.OYbNASfQlufqOAzj1NsFH-JipYoSLTbHs5T6szuRSIs') {
+                    try {
+                        const dato = {};
+                        reportes.reporteDiger(dato, (error, resultado) => {
+                            if (error) {
+                                res.status(200).json({
+                                    status: 'fallido',
+                                    message: error,
+                                    data: null
+                                });
+                            } else {
+            
+                                res.status(200).json({
+                                    status: 'exito',
+                                    message: error,
+                                    data: resultado[0]
+                                });
+                            }
+                        });
+                    } catch (error) {
+                        res.status(200).json({
+                            status: 'fallido',
+                            message: error,
+                            data: null
+                        });
+                    }
+                }
+            }
+        } catch (error) {
+            return res.status(401).json({
+                message: "URL Invalida"
+            });
+        }
+    });
+
     app.post('/usuario-login',  (req, res) => {
         try {
             const parametros = req.body;
